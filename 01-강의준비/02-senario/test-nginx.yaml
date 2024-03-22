@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+  namespace: nginx
+spec:
+  selector:
+    matchLabels:
+      run: my-nginx
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        run: my-nginx
+    spec:
+      # terminationGracePeriodSeconds 값은 preStop hook에 명시된 시간보다 길어야 함
+      # terminationGracePeriodSeconds: 0
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: my-nginx
+          image: nginx
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 200Mi
+            requests:
+              cpu: 500m
+              memory: 200Mi
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - "-c"
+                  - sleep 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  namespace: nginx
+  labels:
+    run: my-nginx
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    run: my-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: nginx
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing # ALB의 Scheme을 지정합니다. (internet-facing 또는 internal)
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-nginx
+                port:
+                  name: http

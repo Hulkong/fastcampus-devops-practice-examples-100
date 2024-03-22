@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: myapp
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          # 예제를 위해 의도적으로 잘못된 명령어를 포함한 컨테이너를 생성합니다.
+          # command: ["./myapp-binary"] # 잘못된 명령어
+    

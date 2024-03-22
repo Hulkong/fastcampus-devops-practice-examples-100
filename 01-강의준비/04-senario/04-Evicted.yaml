@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overprovisioning
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: overprovisioning
+  template:
+    metadata:
+      labels:
+        app: overprovisioning
+    spec:
+      terminationGracePeriodSeconds: 0
+      # priorityClassName: lowpriority
+      priorityClassName: highpriority
+      containers:
+        - name: overprovisioning
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 200Mi
+            requests:
+              cpu: 1000m
+              memory: 200Mi
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: lowpriority
+value: -1
+globalDefault: false
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: highpriority
+value: 100
+globalDefault: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: myapp
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi

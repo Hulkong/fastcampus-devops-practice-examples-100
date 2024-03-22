@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-namespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: my-namespace
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: main-container
+        image: busybox
+        resources:
+          limits:
+            cpu: "500m"
+            memory: 200Mi
+          requests:
+            cpu: "500m"
+            memory: 200Mi
+        command: ["sh", "-c", "while true; do sleep 10; done"]
+        volumeMounts:
+        - name: shared-volume
+          mountPath: /shared-data
+      initContainers:
+      - name: init-container
+        image: busybox
+        command: ["sh", "-c", "echo 'Init container started'; sleep 3600; echo 'Init container completed'"] # 의도적으로 InitContainer 실행시간을 지연시킴
+        volumeMounts:
+        - name: shared-volume
+          mountPath: /shared-data
+      volumes:
+      - name: shared-volume
+        emptyDir: {}
