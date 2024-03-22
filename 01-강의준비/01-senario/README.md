@@ -5,13 +5,13 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 <br>
 
 ## 챕터명
----
+
 노드의 예약 대기 시간과 인프라 비용을 줄이기 위해 karpenter 사용
 
 <br><br>
 
 ## 내용
----
+
 서비스를 운영하다 보면, 트래픽에 유연하게 대응하기 위해서 애플리케이션의 수를 증가시킬 필요가 있습니다.
 이 때, 우리는 EKS 상에서 서비스 되고 있는 파드의 수를 수동적이든, `HPA`를 사용하여 자동적이든 증가시키는데 성공합니다.  
 
@@ -25,7 +25,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 <br><br>
 
 ## 환경
----
+
 Terraform
 AWS: EKS
 Cluster Autoscaler
@@ -35,7 +35,7 @@ Sample pause pod
 <br><br>
 
 ## 시나리오
----
+
 1. 환경구축
 2. `ClusterAutoscaler(CA)`가 없을 때, pending 현상 발생시킴(replica -> 5)
 3. `ClusterAutoscaler` 생성 후, 노드 프로비저닝 속도와 실제 애플리케이션 동작하는 타임라인 확인
@@ -44,7 +44,7 @@ Sample pause pod
 <br><br>
 
 ## 주요명령어
----
+
 ```bash
 k9s                               # 쿠버네티스 환경과 상호작용 하기 위한 GUI
 

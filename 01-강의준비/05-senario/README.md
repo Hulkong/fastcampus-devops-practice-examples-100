@@ -5,13 +5,13 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 <br>
 
 ## 챕터명
----
+
 삭제가 되지 않는 Stuck 상태인 리소스를 해결해보자.
 
 <br><br>
 
 ## 내용
----
+
 쿠버네티스 상에서는 다양한 이유로 파드가 `stuck` 상태로 머무를 수 있습니다. 이는 예기치 못한 서비스의 장애를 일으키기 때문에 확인되면 빠르게 해당 리소스를 정리해 주어야 합니다.
 
 이번 실습에서는 `Stuck` 상태를 재현해 보고, 해당 상태를 해결해보도록 합니다.
@@ -22,7 +22,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 <br><br>
 
 ## 환경
----
+
 Terraform
 AWS: EKS
 Karpenter
@@ -31,14 +31,14 @@ Sample application
 <br><br>
 
 ## 시니라오
----
+
 1. Stuck 발생
 2. Stuck 해결
 
 <br><br>
 
 ## Stuck 유형
----
+
 1. **ResourceQuotaMemory**: 네임스페이스의 메모리 허용치를 설정하여 그 이상 설정된 파드가 배포되지 못하고 stuck 상태로 남아 있도록 합니다.
 2. **ResourceQuotaCPU**: 네임스페이스의 메모리 허용치를 설정하여 그 이상 설정된 파드가 배포되지 못하고 stuck 상태로 남아 있도록 합니다.
 3. **InitContainerIssue**: initContainer에 문제를 일으켜 메인 컨테이너를 stuck 상태로 만들어 봅니다.
@@ -47,7 +47,7 @@ Sample application
 <br><br>
 
 ## 주요명령어
----
+
 ```bash
 k9s                               # 쿠버네티스 환경과 상호작용 하기 위한 GUI
 
