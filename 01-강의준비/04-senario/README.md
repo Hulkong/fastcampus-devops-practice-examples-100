@@ -15,17 +15,17 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 쿠버네티스 환경에서 서비스를 운영하다 보면, 다양한 에러가 발생합니다. 이 때, 에러가 발생하면 어떻게 파악하고 어떻게 해석하여 해결하는지에 대해서 알아보도록 합니다.  
 
 실습에서는 파드를 비정상 상태로 만들고, 해당 에러를 파악하여 올바르게 해결해 보는 시간을 가집니다.
-![overprovisioning](../../images/04-senario.png)
+![error_messages](../../images/04-senario.png)
 **[그림1. 문제가 일어난 파드를 확인하고 분석하는 과정]**
 
 <br><br>
 
 ## 환경
 
-Terraform
-AWS: EKS
-Karpenter
-Sample application
+- Terraform
+- AWS: EKS
+- Karpenter
+- Sample application
 
 <br><br>
 

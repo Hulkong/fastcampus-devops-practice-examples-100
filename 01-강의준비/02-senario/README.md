@@ -23,23 +23,23 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 이번 실습에서는 이러한 이슈를 발생시켜 보고, 실제로 위 방법을 사용하여 해결해 보도록 하겠습니다.
 
-![graceful_shutdown](../../images/02-senario.png)
+![graceful_shutdown_01](../../images/02-senario.png)
 **[그림1. ALB TG에서 pod의 IP가 제거되기 전에 파드가 종료되었을 때, 유저가 접근하는 케이스]**
 
 <br>
 
-![graceful_shutdown](../../images/02-senario02.png)
+![graceful_shutdown_02](../../images/02-senario02.png)
 **[그림2. 파드가 종료되기 전, ALB TG에서 pod의 IP가 먼저 제거되었을 때 유저가 접근하는 케이스]**
 
 <br><br>
 
 ## 환경
 
-Terraform
-AWS: EKS
-Karpenter
-Sample application
-Vegeta
+- Terraform
+- AWS: EKS
+- Karpenter
+- Sample application
+- Vegeta
 
 <br><br>
 

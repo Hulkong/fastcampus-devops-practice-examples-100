@@ -25,12 +25,12 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 ## 환경
 
-Terraform
-AWS: EKS
-Karpenter
-Metric Server
-Sample application
-Overprovisioning pod
+- Terraform
+- AWS: EKS
+- Karpenter
+- Metric Server
+- Sample application
+- Overprovisioning pod
 
 <br><br>
 

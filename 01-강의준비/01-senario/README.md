@@ -26,11 +26,11 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 ## 환경
 
-Terraform
-AWS: EKS
-Cluster Autoscaler
-Karpenter
-Sample pause pod
+- Terraform
+- AWS: EKS
+- Cluster Autoscaler
+- Karpenter
+- Sample pause pod
 
 <br><br>
 
@@ -57,3 +57,10 @@ kubectl config current-context    # 현재 나의 로컬환경에 연결되어 �
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
 ```
+
+<br><br>
+
+## 참고
+- [Karpenter](https://karpenter.sh/)
+- [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md)
+- [Cluster Autoscaler vs Karpenter](https://www.eksworkshop.com/docs/autoscaling/compute/)
