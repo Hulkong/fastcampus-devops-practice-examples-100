@@ -27,7 +27,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 ## 환경
 
 - Terraform
-- AWS: EKS
+- EKS
 - Cluster Autoscaler
 - Karpenter
 - Sample pause pod

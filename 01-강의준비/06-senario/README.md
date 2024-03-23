@@ -47,7 +47,7 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 ## 환경
 
 - Terraform
-- AWS: EKS
+- EKS
 - Karpenter
 - ArgoCD(+ kustomize 또는 helm)
 - Sample nginx pod
@@ -56,7 +56,7 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 
 ## 시나리오
 
-1. 규모가 작은 기업에서 데브옵스 엔지니어가 모든 서비스의 GitOps를 관리할 경우, `kutsomize`를 사용하자.
+1. 규모가 작은 기업에서 데브옵스 엔지니어가 모든 서비스의 GitOps를 관리할 경우, `kustomize`를 사용하자.
 2. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용할 필요가 있거나, 팀 별로 각 서비스를 구성하는 k8s 리소스들이 어느 정도 정해져 있으면 `Helm`으로 통합 관리하자.
 3. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용하고, 커스텀을 쉽게 진행하기 위해서, `helm + kustomize`를 사용하자.
 
