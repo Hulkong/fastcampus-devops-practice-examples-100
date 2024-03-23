@@ -49,8 +49,9 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 - Terraform
 - EKS
 - Karpenter
-- ArgoCD(+ kustomize 또는 helm)
-- Sample nginx pod
+- kustomize
+- helm
+- Sample app
 
 <br><br>
 
@@ -69,6 +70,19 @@ terraform init                    # 테라폼 모듈 다운로드 및 초기화 
 terraform plan                    # 테라폼으로 파일에 명시된 리소스들을 프로비저닝 하기 전 확인단계
 terraform apply                   # 테라폼으로 파일에 명시된 리소스들을 프로비저닝
 terraform destroy                 # 테라폼으로 파일에 명시된 리소스들을 삭제함
+
+kustomize build {kustomization.yaml 파일이 있는 경로}                         # 커스텀이 적용된 yaml파일을 만듬
+kustomize build {kustomization.yaml 파일이 있는 경로} | kubectl apply -f -    # 커스텀이 적용된 yaml파일을 만들어 클러스터에 배포
+kustomize build {kustomization.yaml 파일이 있는 경로} | kubectl delete -f -   # 클러스터에 배포된 k8s 리소스들을 모두 삭제
+
+helm dependency build                  # Chart.yaml 의 내용에 따라 charts/ 업데이트
+helm template {helm 파일들이 있는 경로}    # 로컬에서 템플릿을 렌더링
+helm template {helm 파일들이 있는 경로} | kubectl apply -f -     # 로컬에서 템플릿을 렌더링 후, 클러스터에 배포
+helm template {helm 파일들이 있는 경로} | kubectl delete -f -    # 클러스터에 배포된 k8s 리소스들을 모두 삭제
+
+kustomize build . --enable-helm        # kustomize를 사용하여 helm 템플릿을 렌더링 한 후, 커스텀이 적용된 yaml파일을 만듬
+kustomize build . --enable-helm | kubectl apply -f -     # kustomize를 사용하여 helm 템플릿을 렌더링 한 후, 커스텀이 적용된 yaml파일을 기반으로 클러스터에 배포
+kustomize build . --enable-helm | kubectl delete -f -    # 클러스터에 배포된 k8s 리소스들을 모두 삭제
 ```
 
 <br><br>
@@ -76,4 +90,5 @@ terraform destroy                 # 테라폼으로 파일에 명시된 리소�
 ## 참고
 - [kustomize](https://kustomize.io/)
 - [helm](https://helm.sh/)
-- [ArgoCD](https://argo-cd.readthedocs.io/en/stable/)
+- [argocd-examples-apps](https://github.com/kmaster8/argocd-example-apps)
+- [kustomization of a helm chart](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/chart.md#kustomization-of-a-helm-chart)

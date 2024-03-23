@@ -8,6 +8,8 @@
 - aws CLI v2.15.17
 - vegeta v12.11.1
 - EKS v1.28
+- kustomize v5.3.0
+- helm v3.13.2
 
 참고로, Windows에서는 WSL(Windows Subsystem for Linux)을 사용하여 Linux 환경을 구축하고 그 안에서 각 종 툴을 사용하는 것도 좋은 대안이 될 수 있습니다. 이 방법을 통하면 Linux에서와 동일한 방식으로 툴을 사용할 수 있습니다.
 > [wsl 공식 설치 문서](https://learn.microsoft.com/ko-kr/windows/wsl/install) 
@@ -55,11 +57,56 @@ https://github.com/tsenart/vegeta?tab=readme-ov-file#install
 
 ```bash
 # ex. macOS
-$ brew update && brew install vegeta
+brew update && brew install vegeta
 
 # ex. 기타 리눅스 OS
 git clone https://github.com/tsenart/vegeta
 cd vegeta
 make vegeta
 mv vegeta ~/bin # Or elsewhere, up to you.
+```
+
+<br>
+
+### 6. EKS 설치
+> EKS는 01-강의준비/main.tf 파일을 기반으로 테라폼으로 프로비저닝 할 수 있습니다.
+
+```terraform
+# 01-강의준비/main.tf
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.15"
+
+  cluster_name                   = local.name
+  ......
+}
+```
+
+```bash
+# terraform으로 EKS 프로비저닝
+cd fastcampus-devops-practice-examples-100
+terraform -chdir=01-강의준비 plan
+terraform -chdir=01-강의준비 apply
+```
+
+<br>
+
+### 7. kustomize 설치
+> 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
+https://kubectl.docs.kubernetes.io/installation/kustomize/
+
+```bash
+# ex. macOS
+brew install kustomize
+```
+
+<br>
+
+### 8. helm 설치
+> 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
+https://helm.sh/docs/intro/install/
+
+```bash
+# ex. macOS
+brew install helm
 ```
