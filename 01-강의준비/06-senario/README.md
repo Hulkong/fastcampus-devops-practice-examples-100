@@ -48,7 +48,6 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 
 - Terraform
 - AWS: EKS
-- Cluster Autoscaler
 - Karpenter
 - ArgoCD(+ kustomize 또는 helm)
 - Sample nginx pod
