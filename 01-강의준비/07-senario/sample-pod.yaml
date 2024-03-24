@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+        - name: sample-app
+          image: hulkong/fastcampus-devops-practice-examples-100:07-senario
+      serviceAccountName: sample-app
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sample-app
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01_test_role"             # IRSA Role 사용
+    # eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01-eks-pod-identity"    # Pod Itentity Role 사용

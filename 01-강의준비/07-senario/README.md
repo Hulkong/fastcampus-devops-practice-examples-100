@@ -41,9 +41,10 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 ## 시나리오
 
-1. 규모가 작은 기업에서 데브옵스 엔지니어가 모든 서비스의 GitOps를 관리할 경우, `kustomize`를 사용하자.
-2. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용할 필요가 있거나, 팀 별로 각 서비스를 구성하는 k8s 리소스들이 어느 정도 정해져 있으면 `Helm`으로 통합 관리하자.
-3. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용하고, 커스텀을 쉽게 진행하기 위해서, `helm + kustomize`를 사용하자.
+1. 권한이 없어, 특정 S3에 PutObject를 진행할 수 없는 시나리오
+2. InstanceProfile을 사용하여 특정 S3에 PutObject를 진행할 수 있는 시나리오
+3. IRSA를 사용하여 특정 서비스가 특정 S3에 PutObject를 진행할 수 있는 시나리오
+4. Pod identity를 사용하여 특정 서비스가 특정 S3에 PutObject를 진행할 수 있는 시나리오
 
 <br><br>
 
@@ -66,3 +67,5 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 - [IRSA](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/iam-roles-for-service-accounts.html)
 - [EKS Pod Identity](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/pod-identities.html)
 - [Amazon EKS Pod Identity, Amazon EKS 클러스터앱의 IAM 권한 단순화](https://aws.amazon.com/ko/blogs/korea/amazon-eks-pod-identity-simplifies-iam-permissions-for-applications-on-amazon-eks-clusters/)
+- [Amazon EKS Pod Identity: a new way for applications on EKS to obtain IAM credentials](https://aws.amazon.com/ko/blogs/containers/amazon-eks-pod-identity-a-new-way-for-applications-on-eks-to-obtain-iam-credentials/)
+- https://hub.docker.com/repository/docker/hulkong/fastcampus-devops-practice-examples-100/general

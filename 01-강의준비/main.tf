@@ -65,14 +65,14 @@ locals {
   }
 }
 
+
 ################################################################################
-# Cluster
+# EKS Cluster(Supporting Resources)
 ################################################################################
 
 ################################################################################
-# Supporting Resources
+# VPC
 ################################################################################
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
@@ -100,6 +100,10 @@ module "vpc" {
   tags = local.tags
 }
 
+
+################################################################################
+# EKS
+################################################################################
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.15"
@@ -131,16 +135,17 @@ module "eks" {
       capacity_type = "ON_DEMAND"
 
       min_size     = 1
-      max_size     = 3
+      max_size     = 5
       desired_size = 2
     }
   }
 
   # EKS Addons
   cluster_addons = {
-    coredns = {}
+    coredns    = {}
     kube-proxy = {}
-    vpc-cni = {}
+    vpc-cni    = {}
+    # eks-pod-identity-agent = {}
   }
 
   iam_role_name            = join("-", [local.name, "eks", "nodegroup"])
@@ -167,10 +172,10 @@ module "eks" {
   })
 }
 
+
 ################################################################################
 # EKS Blueprints Addons
 ################################################################################
-
 module "eks_blueprints_addons" {
   source  = "aws-ia/eks-blueprints-addons/aws"
   version = "~> 1.0"
@@ -182,16 +187,16 @@ module "eks_blueprints_addons" {
 
   create_kubernetes_resources = true
 
-  enable_cluster_autoscaler = true
-  enable_karpenter          = false
+  enable_cluster_autoscaler           = true
+  enable_karpenter                    = true
   enable_aws_load_balancer_controller = false
-  enable_metrics_server = true
+  enable_metrics_server               = true
 
   karpenter = {
     repository_username = data.aws_ecrpublic_authorization_token.token.user_name
     repository_password = data.aws_ecrpublic_authorization_token.token.password
   }
-  
+
   karpenter_enable_spot_termination          = true
   karpenter_enable_instance_profile_creation = true
   karpenter_node = {
@@ -201,77 +206,76 @@ module "eks_blueprints_addons" {
   tags = local.tags
 }
 
+
 ################################################################################
 # Karpenter
 ################################################################################
+resource "kubectl_manifest" "karpenter_default_ec2_node_class" {
+  yaml_body = <<YAML
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: default
+spec:
+  role: "${module.eks_blueprints_addons.karpenter.node_iam_role_name}"
+  amiFamily: Bottlerocket 
+  securityGroupSelectorTerms:
+  - tags:
+      karpenter.sh/discovery: ${module.eks.cluster_name}
+  subnetSelectorTerms:
+  - tags:
+      karpenter.sh/discovery: ${module.eks.cluster_name}
+  tags:
+    IntentLabel: apps
+    KarpenterNodePoolName: default
+    NodeType: default
+    intent: apps
+    karpenter.sh/discovery: ${module.eks.cluster_name}
+    project: karpenter-blueprints
+YAML
+  depends_on = [
+    module.eks.cluster,
+    module.eks_blueprints_addons.karpenter,
+  ]
+}
 
-# Karpenter default EC2NodeClass and NodePool
-# resource "kubectl_manifest" "karpenter_default_ec2_node_class" {
-#   yaml_body = <<YAML
-# apiVersion: karpenter.k8s.aws/v1beta1
-# kind: EC2NodeClass
-# metadata:
-#   name: default
-# spec:
-#   role: "${module.eks_blueprints_addons.karpenter.node_iam_role_name}"
-#   amiFamily: Bottlerocket 
-#   securityGroupSelectorTerms:
-#   - tags:
-#       karpenter.sh/discovery: ${module.eks.cluster_name}
-#   subnetSelectorTerms:
-#   - tags:
-#       karpenter.sh/discovery: ${module.eks.cluster_name}
-#   tags:
-#     IntentLabel: apps
-#     KarpenterNodePoolName: default
-#     NodeType: default
-#     intent: apps
-#     karpenter.sh/discovery: ${module.eks.cluster_name}
-#     project: karpenter-blueprints
-# YAML
-#   depends_on = [
-#     module.eks.cluster,
-#     module.eks_blueprints_addons.karpenter,
-#   ]
-# }
+resource "kubectl_manifest" "karpenter_default_node_pool" {
+  yaml_body = <<YAML
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: default 
+spec:  
+  template:
+    metadata:
+      labels:
+        intent: apps
+    spec:
+      requirements:
+        - key: kubernetes.io/arch
+          operator: In
+          values: ["amd64"]
+        - key: "karpenter.k8s.aws/instance-category"
+          operator: In
+          values: ["t", "c", "m", "r"]
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["spot", "on-demand"]
+      nodeClassRef:
+        name: default
+      kubelet:
+        containerRuntime: containerd
+        systemReserved:
+          cpu: 100m
+          memory: 100Mi
+  disruption:
+    consolidationPolicy: WhenUnderutilized
+    expireAfter: 720h
 
-# resource "kubectl_manifest" "karpenter_default_node_pool" {
-#   yaml_body = <<YAML
-# apiVersion: karpenter.sh/v1beta1
-# kind: NodePool
-# metadata:
-#   name: default 
-# spec:  
-#   template:
-#     metadata:
-#       labels:
-#         intent: apps
-#     spec:
-#       requirements:
-#         - key: kubernetes.io/arch
-#           operator: In
-#           values: ["amd64"]
-#         - key: "node.kubernetes.io/instance-type"
-#           operator: In
-#           values: ["t3.micro"]
-#         - key: karpenter.sh/capacity-type
-#           operator: In
-#           values: ["spot", "on-demand"]
-#       nodeClassRef:
-#         name: default
-#       kubelet:
-#         containerRuntime: containerd
-#         systemReserved:
-#           cpu: 100m
-#           memory: 100Mi
-#   disruption:
-#     consolidationPolicy: WhenUnderutilized
-#     expireAfter: 720h
-
-# YAML
-#   depends_on = [
-#     module.eks.cluster,
-#     module.eks_blueprints_addons.karpenter,
-#     kubectl_manifest.karpenter_default_node_pool,
-#   ]
-# }
+YAML
+  depends_on = [
+    module.eks.cluster,
+    module.eks_blueprints_addons.karpenter,
+    kubectl_manifest.karpenter_default_node_pool,
+  ]
+}
