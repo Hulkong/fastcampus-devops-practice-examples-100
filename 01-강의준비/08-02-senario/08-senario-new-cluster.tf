@@ -1,3 +1,8 @@
+################################################################################
+# NEW EKS Cluster(Supporting Resources)
+################################################################################
+
+
 data "aws_eks_cluster_auth" "kubernetes" {
   name = module.eks.cluster_name
 }
@@ -53,10 +58,11 @@ provider "kubectl" {
 }
 
 locals {
-  name   = "part01"
+  name   = "part01-new"
   region = "us-west-2"
+  domain = "hulkong.shop"
 
-  vpc_cidr = "10.0.0.0/16"
+  vpc_cidr = "10.4.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
@@ -65,10 +71,6 @@ locals {
   }
 }
 
-
-################################################################################
-# EKS Cluster(Supporting Resources)
-################################################################################
 
 ################################################################################
 # VPC
@@ -136,7 +138,7 @@ module "eks" {
 
       min_size     = 1
       max_size     = 5
-      desired_size = 4
+      desired_size = 3
     }
   }
 
@@ -191,6 +193,9 @@ module "eks_blueprints_addons" {
   enable_karpenter                    = true
   enable_aws_load_balancer_controller = true
   enable_metrics_server               = true
+  enable_external_dns                 = true
+
+  external_dns_route53_zone_arns = values(module.zones.route53_zone_zone_arn)
 
   karpenter = {
     repository_username = data.aws_ecrpublic_authorization_token.token.user_name
@@ -278,4 +283,23 @@ YAML
     module.eks_blueprints_addons.karpenter,
     kubectl_manifest.karpenter_default_node_pool,
   ]
+}
+
+
+################################################################################
+# Route53 zones
+################################################################################
+module "zones" {
+  source  = "terraform-aws-modules/route53/aws//modules/zones"
+  version = "~> 2.0"
+
+  zones = {
+    "${local.domain}" = {
+      comment = local.domain
+    }
+  }
+
+  tags = {
+    ManagedBy = "terraform"
+  }
 }

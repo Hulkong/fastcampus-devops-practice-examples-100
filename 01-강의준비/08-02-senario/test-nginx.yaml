@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+  namespace: nginx
+spec:
+  selector:
+    matchLabels:
+      run: my-nginx
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        run: my-nginx
+    spec:
+      containers:
+        - name: my-nginx
+          image: nginx
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - "-c"
+                  - sleep 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  namespace: nginx
+  labels:
+    run: my-nginx
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    run: my-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: nginx
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/load-balancer-name: part01-nginx-new             # aws loadbalancer controller가 해당 annotation을 읽고, 로드밸런서 이름을 설정함 
+    external-dns.alpha.kubernetes.io/hostname: part01-senario8.hulkong.shop    # external-dns가 해당 annotation을 읽고, route53의 해당 zone에 hostname을 레코드로 등록함
+    external-dns.alpha.kubernetes.io/set-identifier: part01-nginx-new          # Route53의 가중치 기반 라우팅에서 각 동일한 레코드를 구분하기 위한 식별자 지정
+    external-dns.alpha.kubernetes.io/aws-weight: "0"                           # Route53의 가중치 기반 라우팅에서 가중치 값을 설정
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-nginx
+                port:
+                  name: http

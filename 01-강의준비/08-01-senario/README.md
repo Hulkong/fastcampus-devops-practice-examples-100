@@ -21,8 +21,8 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br>
 
-![manual_upgrade](../../images/08-senario02.png)
-**[그림2. karpenter를 사용하여 자동으로 EKS 노드 버전을 업그레이드]**
+![manual_upgrade](../../images/08-senario03.png)
+**[그림2. CA와 karpenter를 사용하여 자동으로 EKS 노드 버전을 업그레이드]**
 
 <br><br>
 
@@ -37,8 +37,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 ## 시나리오
 
-1. 싱글 클러스터에서 `cordon`과 `drain`을 사용하여 수동으로 노드 버전을 업그레이드해보자
-2. 싱글 클러스터에서 `karpenter`를 이용해서 자동으로 노드 버전을 업그레이드해보자
+싱글 클러스터에서 `Cluster Autoscaler`을 사용하여 노드 그룹을 업그레이드하고, `karpenter`를 이용해서 노드 버전을 자동으로 업그레이드합니다.
 
 <br><br>
 
