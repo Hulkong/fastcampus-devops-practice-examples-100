@@ -21,7 +21,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br>
 
-![umbrella_helm_chart01](../../images/12-senario.png)
+![real_senario](../../images/12-senario.png)
 **[그림1. 대용량 트래픽이 유입될 때, 각 적절한 기술을 사용하여 안정적인 대응을 하는 모습]**
 
 <br><br>
@@ -38,6 +38,14 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 ## 시나리오
 
 쇼핑몰 서비스에서 대용량 트래픽이 들어왔을 때, 유연하게 처리해봅니다.
+
+![Screenshot](../../images/12-screenshot.png)
+**[그림2. 샘플 쇼핑몰 서비스에 대한 화면]**
+
+<br>
+
+![Architecture](../../images/12-architecture.png)
+**[그림3. 샘플 쇼핑몰 서비스에 대한 아키텍쳐]**
 
 <br><br>
 
@@ -56,5 +64,45 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 
 <br><br>
 
+## 실제 실습 명령어
+
+```bash
+# 1. catalog 배포
+kubectl apply -f 01-catalog.yaml
+
+# 2. carts 배포
+kubectl apply -f 02-carts.yaml
+
+# 3. orders 배포
+kubectl apply -f 03-orders.yaml
+
+# 4. checkout 배포
+kubectl apply -f 04-checkout.yaml
+
+# 5. assets 배포
+kubectl apply -f 05-assets.yaml
+
+# 6. ui 배포
+kubectl apply -f 06-ui.yaml
+
+# 7. UI 엔드포인트 주소 조회
+kubectl get svc ui
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|언어|설명|
+|---|---|---|
+|01-catalog.yaml|Java|Product catalog API|
+|02-carts.yaml|Go|User shopping carts API|
+|03-orders.yaml|Java|User orders API|
+|04-checkout.yaml|Java|API to orchestrate the checkout process|
+|05-assets.yaml|Node|Serves static assets like images related to the product catalog|
+|06-ui.yaml|NginX|Aggregates API calls to the various other services and renders the HTML UI.|
+
+<br><br>
+
 ## 참고
 - [retail-store-sample-app 소스 코드](https://github.com/aws-containers/retail-store-sample-app)
+- [Liveness and Readiness Probes with Spring Boot](https://spring.io/blog/2020/03/25/liveness-and-readiness-probes-with-spring-boot)
