@@ -41,9 +41,8 @@ LiveneesProbe로 인해 서비스 다운타임이 발생하는 시나리오를 �
 
 ## 시나리오
 
-1. 외부 서비스를 이용하는 서비스에서 해당 외부 서비스가 다운되었을 때, 본인의 서비스도 영향을 미치는 상황을 재현해봅니다.
-2. 서비스의 헬스체크 중, DB의 Uptime도 포함되어 있을 때, 해당 DB에 문제를 생기게 하고 그로 인해 자신의 서비스도 영향을 미치는 상황을 재현해봅니다.
-3. CPU Intensive한 서비스에서 LivenessProbe 체크를 httpGet을 진행할 경우, 문제가 생기는 경우를 재현해봅니다.
+1. 서비스의 헬스체크 중, DB의 Uptime도 포함되어 있을 때, 해당 DB에 문제를 생기게 하고 그로 인해 자신의 서비스도 영향을 미치는 상황을 재현해봅니다.
+2. CPU Intensive한 서비스에서 LivenessProbe 체크를 httpGet을 진행할 경우, 문제가 생기는 경우를 재현해봅니다.
 
 <br><br>
 
@@ -58,4 +57,24 @@ terraform destroy                 # 테라폼으로 파일에 명시된 리소�
 kubectl config current-context    # 현재 나의 로컬환경에 연결되어 있는 클러스터 확인
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제제외
+
+docker build --platform linux/amd64 . -t {도커 저장소:태그}
 ```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|app.js|실습에서 사용할 애플리케이션 소스파일|
+|Dockerfile|실습에서 사용할 애플리케이션을 컨테이너라이징|
+|package.json|app.js에서 사용할 라이브러리 버전 명시|
+|package-lock.json|라이브러리를 설치한 시점의 의존성 트리에 대한 정확한 정보|
+|fail-livenessprobe-cuz-db.yaml|DB 연결 오류로, 앱의 livenessProbe를 실패하게 하는 실습 코드|
+|fail-livenessprobe-cuz-CPU-throttle.yaml|CPU 쓰로틀링으로, 앱의 livenessProbe를 실패하게 하는 실습 코드|
+
+<br><br>
+
+## 참고
+- [mongoDB 도커이미지](https://hub.docker.com/_/mongo)
+- [시나리오 도커 이미지](https://hub.docker.com/repository/docker/hulkong/fastcampus-devops-practice-examples-100/general)

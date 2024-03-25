@@ -68,4 +68,4 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 - [EKS Pod Identity](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/pod-identities.html)
 - [Amazon EKS Pod Identity, Amazon EKS 클러스터앱의 IAM 권한 단순화](https://aws.amazon.com/ko/blogs/korea/amazon-eks-pod-identity-simplifies-iam-permissions-for-applications-on-amazon-eks-clusters/)
 - [Amazon EKS Pod Identity: a new way for applications on EKS to obtain IAM credentials](https://aws.amazon.com/ko/blogs/containers/amazon-eks-pod-identity-a-new-way-for-applications-on-eks-to-obtain-iam-credentials/)
-- https://hub.docker.com/repository/docker/hulkong/fastcampus-devops-practice-examples-100/general
+- [시나리오 도커 이미지](https://hub.docker.com/repository/docker/hulkong/fastcampus-devops-practice-examples-100/general)

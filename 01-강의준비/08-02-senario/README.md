@@ -37,7 +37,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 ## 시나리오
 
-1. 멀티 클러스터 환경에서 서비스의 다운타임을 최소화하여 노드 버전을 업그레이드해보자
+멀티 클러스터 환경에서 서비스의 다운타임을 최소화하여 노드 버전을 업그레이드해보자
 
 <br><br>
 
@@ -58,3 +58,5 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 
 ## 참고
 - [Onfido’s Journey to a Multi-Cluster Amazon EKS Architecture](https://aws.amazon.com/ko/blogs/containers/)
+- [freenom](https://www.freenom.com/)
+- [gabia](https://domain.gabia.com/)

@@ -1,0 +1,9 @@
+dependencies:
+- name: svc1
+  repository: file://../svc1
+  version: 0.1.0
+- name: svc2
+  repository: file://../svc2
+  version: 0.1.0
+digest: sha256:62d891632566faed6df06a6491d816f6826685105937cb085e853cea3a989188
+generated: "2024-03-25T02:39:56.008163+09:00"
