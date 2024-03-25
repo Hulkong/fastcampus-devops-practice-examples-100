@@ -1,0 +1,12 @@
+fullnameOverride: "backend-service"
+
+replicas: 3
+
+image:
+  repository: hulkong/fastcampus-devops-practice-examples-100
+  tag: 10-senario-backend
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000

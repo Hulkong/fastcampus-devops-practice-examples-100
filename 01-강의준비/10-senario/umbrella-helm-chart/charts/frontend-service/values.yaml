@@ -1,0 +1,10 @@
+fullnameOverride: "frontend-service"
+
+replicas: 1
+
+image:
+  repository: hulkong/fastcampus-devops-practice-examples-100
+  tag: 10-senario-frontend
+
+service:
+  port: 80

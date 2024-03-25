@@ -1,0 +1,7 @@
+fullnameOverride: "mongodb"
+
+replicas: 1
+
+service:
+  port: 27017
+  targetPort: 27017

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: 10-senario
+description: An umbrella Helm chart for the 10-senario application
+version: 1.0.0
+dependencies:
+  - name: backend-service
+    version: 1.0.0
+    repository: "file://charts/backend-service"
+  - name: frontend-service
+    version: 1.0.0
+    repository: "file://charts/frontend-service"
+  - name: mongodb
+    version: 1.0.0
+    repository: "file://charts/mongodb"

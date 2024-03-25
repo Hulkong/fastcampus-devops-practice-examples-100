@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mongodb.fullname" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+  - port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.port }}
+  clusterIP: None
+  selector:
+    app: {{ include "mongodb.name" . }}

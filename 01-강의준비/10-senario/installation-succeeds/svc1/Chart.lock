@@ -1,6 +1,0 @@
-dependencies:
-- name: mongodb
-  repository: https://charts.helm.sh/stable
-  version: 7.4.6
-digest: sha256:b09fe31209b4826af92facdcfb2d5178387bc724237b4de2732851ca517b455e
-generated: "2024-03-25T02:39:43.678235+09:00"

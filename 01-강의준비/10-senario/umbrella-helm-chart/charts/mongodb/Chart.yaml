@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mongodb
+version: 1.0.0
+description: mongodb for the 10-senario application

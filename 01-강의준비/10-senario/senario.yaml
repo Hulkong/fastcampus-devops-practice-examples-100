@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: 10-senario
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-service
+  namespace: 10-senario
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: frontend-service
+  template:
+    metadata:
+      labels:
+        name: frontend-service
+    spec:
+      containers:
+      - name: frontend-service
+        image: hulkong/fastcampus-devops-practice-examples-100:10-senario-frontend
+        ports:
+          - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-service
+  namespace: 10-senario
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-service
+  template:
+    metadata:
+      labels:
+        app: backend-service
+    spec:
+      containers:
+      - name: backend-service
+        image: hulkong/fastcampus-devops-practice-examples-100:10-senario-backend
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: 10-senario
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: backend-service
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: 10-senario
+spec:
+  serviceName: "mongodb"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        ports:
+        - containerPort: 27017
+          name: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: 10-senario
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    app: mongodb
