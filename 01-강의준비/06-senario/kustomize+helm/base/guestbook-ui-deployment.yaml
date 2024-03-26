@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kustomize-helm-guestbook
+spec:
+  selector:
+    matchLabels:
+      app: kustomize-helm-guestbook
+  template:
+    metadata:
+      labels:
+        app: kustomize-helm-guestbook
+    spec:
+      containers:
+      - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
+        name: kustomize-helm-guestbook
+        ports:
+        - name: http
+          containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: guestbook-config
+      

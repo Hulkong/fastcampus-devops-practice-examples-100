@@ -4,8 +4,3 @@ kind: Kustomization
 resources:
 - guestbook-ui-deployment.yaml
 - guestbook-ui-svc.yaml
-
-configMapGenerator:
-- name: guestbook-config
-  envs:
-  - config

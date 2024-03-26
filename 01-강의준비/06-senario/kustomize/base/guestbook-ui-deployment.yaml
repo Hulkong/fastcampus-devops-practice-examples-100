@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: guestbook-ui
+  name: kustomize-guestbook-ui
 spec:
   selector:
     matchLabels:
-      app: guestbook-ui
+      app: kustomize-guestbook-ui
   template:
     metadata:
       labels:
-        app: guestbook-ui
+        app: kustomize-guestbook-ui
     spec:
       containers:
       - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
-        name: guestbook-ui
+        name: kustomize-guestbook-ui
         ports:
         - name: http
           containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: guestbook-config

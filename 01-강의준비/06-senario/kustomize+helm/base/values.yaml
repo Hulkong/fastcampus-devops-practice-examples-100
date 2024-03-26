@@ -1,0 +1,4 @@
+fullnameOverride: kustomize-helm-guestbook
+nameOverride: kustomize-helm-guestbook
+
+replicaCount: 1

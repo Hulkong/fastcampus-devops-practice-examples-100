@@ -87,6 +87,42 @@ kustomize build . --enable-helm | kubectl delete -f -    # 클러스터에 배�
 
 <br><br>
 
+## 실제 실습 명령어
+
+```bash
+# 1. 헬름으로 서비스 배포 및 삭제
+helm template demo ./helm
+helm install demo ./helm
+helm delete demo
+
+# 2-1. kustomize로 dev 환경의 서비스 배포 및 삭제
+kustomize build ./kustomize/dev | kubectl apply -f -
+kustomize build ./kustomize/dev | kubectl delete -f -
+
+# 2-2. kustomize로 prod 환경의 서비스 배포 및 삭제
+kustomize build ./kustomize/prod | kubectl apply -f -
+kustomize build ./kustomize/prod | kubectl delete -f -
+
+# 3-1. kustomize+helm으로 dev 환경의 서비스 배포 및 삭제
+kustomize build ./kustomize+helm/dev --enable-helm | kubectl apply -f -
+kustomize build ./kustomize+helm/dev --enable-helm | kubectl delete -f -
+
+# 3-2. kustomize+helm으로 prod 환경의 서비스 배포 및 삭제
+kustomize build ./kustomize+helm/prod --enable-helm | kubectl apply -f -
+kustomize build ./kustomize+helm/prod --enable-helm | kubectl delete -f -
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|helm|helm으로 k8s 리소스를 배포하기 위한 디렉토리|
+|kustomize|kustomize로 k8s 리소스를 배포하기 위한 디렉토리|
+|kustomize+helm|kustomize와 helm을 사용하여 k8s 리소스를 배포하기 위한 디렉토리|
+
+<br><br>
+
 ## 참고
 - [kustomize](https://kustomize.io/)
 - [helm](https://helm.sh/)
