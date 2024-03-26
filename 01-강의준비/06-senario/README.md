@@ -115,7 +115,7 @@ kustomize build ./kustomize+helm/prod --enable-helm | kubectl delete -f -
 <br><br>
 
 ## 파일 설명
-|파일명|설명|
+|디렉토리명|설명|
 |---|---|
 |helm|helm으로 k8s 리소스를 배포하기 위한 디렉토리|
 |kustomize|kustomize로 k8s 리소스를 배포하기 위한 디렉토리|
