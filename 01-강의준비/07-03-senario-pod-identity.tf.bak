@@ -1,6 +1,6 @@
 resource "aws_eks_pod_identity_association" "association" {
   cluster_name    = module.eks.cluster_name
-  namespace       = "default"
+  namespace       = "07-senario"
   service_account = "sample-app"
   role_arn        = aws_iam_role.part01_pod_identity.arn
 }
