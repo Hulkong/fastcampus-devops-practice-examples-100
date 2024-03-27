@@ -29,7 +29,6 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 - EKS
 - ALB
 - Route53
-- Ingress
 - Karpenter
 - Sample application
 
@@ -44,19 +43,60 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 ## 주요명령어
 
 ```bash
-terraform init                    # 테라폼 모듈 다운로드 및 초기화 작업 진행
-terraform plan                    # 테라폼으로 파일에 명시된 리소스들을 프로비저닝 하기 전 확인단계
-terraform apply                   # 테라폼으로 파일에 명시된 리소스들을 프로비저닝
-terraform destroy                 # 테라폼으로 파일에 명시된 리소스들을 삭제함
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
 
-kubectl config current-context    # 현재 나의 로컬환경에 연결되어 있는 클러스터 확인
-kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
-kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제제외
+# 1. 기존 버전의 EKS 클러스터에 샘플 애플리케이션 배포
+kubectl apply -f ../08-01-senario/sample-app.yaml
+
+# 2. curl 명령어를 통해 샘플 애플리케이션 호출 테스트
+curl "http://part01-senario8.hulkong.shop"
+
+# 3. 서비스가 운영 중인 상황을 가장하기 위해 초당 5개씩 1000s 동안 해당 샘플 애플리케이션에 트래픽을 전송함
+echo "GET http://part01-senario8.hulkong.shop" | vegeta attack -duration=1000s -rate=5 | vegeta report
+
+# 4. 신규 버전의 EKS 클러스터와 가중치 전환을 위한 Routet53에 Hosted Zone 생성
+terraform apply --auto-approve
+
+# 5. 신규 클러스터에 접근하기 위한 kubeconfig 파일 업데이트
+aws eks --region us-west-2 update-kubeconfig --name part01-new
+
+# 6. 현재 나의 로컬환경에 설정된 클러스터의 컨텍스트가 무엇인지 확인
+kubectl config current-context
+
+# 7. 신규 클러스터에 샘플 애플리케이션 배포
+kubectl apply -f sample-app-new.yaml
+
+# 8. curl 명령어를 통해 새로운 클러스터의 샘플 애플리케이션 호출 테스트
+curl "http://$(kubectl get -n 08-senario ingress/nginx-ingress -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')"
+
+# 9. 샘플 애플리케이션 삭제
+kubectl delete -f sample-app-new.yaml
+
+# 10. 신규 클러스터 제거
+terraform destroy --auto-approve
+
+# 11. 기존 애플리케이션 삭제
+kubectl delete -f ../08-01-senario/sample-app.yaml
+
+# 12. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
 ```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|sample-app-new.yaml|신규 EKS 클러스터에 배포할 샘플 애플리케이션 메니페스트|
+|08-01-senario-route53.tf|가중치 기반 라우팅을 위하여 Route53의 hosted zone을 생성하는 테라폼 파일|
+|08-02-senario-new-cluster.tf|신규 EKS 클러스터를 배포하는 테라폼 파일|
 
 <br><br>
 
 ## 참고
 - [Onfido’s Journey to a Multi-Cluster Amazon EKS Architecture](https://aws.amazon.com/ko/blogs/containers/)
 - [freenom](https://www.freenom.com/)
-- [gabia](https://domain.gabia.com/)
+- [도메인 등록 대행 및 서버 호스팅(가비아)](https://www.gabia.com/)
+- [ExternalDNS](https://github.com/kubernetes-sigs/external-dns)

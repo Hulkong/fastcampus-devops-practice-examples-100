@@ -1,8 +1,6 @@
 ################################################################################
 # NEW EKS Cluster(Supporting Resources)
 ################################################################################
-
-
 data "aws_eks_cluster_auth" "kubernetes" {
   name = module.eks.cluster_name
 }
@@ -58,10 +56,8 @@ provider "kubectl" {
 }
 
 locals {
-  name   = "part01-new"
-  region = "us-west-2"
-  domain = "hulkong.shop"
-
+  name     = "part01-new"
+  region   = "us-west-2"
   vpc_cidr = "10.4.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
@@ -193,9 +189,9 @@ module "eks_blueprints_addons" {
   enable_karpenter                    = true
   enable_aws_load_balancer_controller = true
   enable_metrics_server               = true
-  enable_external_dns                 = true
+  enable_external_dns                 = false
 
-  external_dns_route53_zone_arns = values(module.zones.route53_zone_zone_arn)
+  # external_dns_route53_zone_arns = ["arn:aws:route53:::hostedzone/본인의 HostedZone ID"]
 
   karpenter = {
     repository_username = data.aws_ecrpublic_authorization_token.token.user_name
@@ -283,23 +279,4 @@ YAML
     module.eks_blueprints_addons.karpenter,
     kubectl_manifest.karpenter_default_node_pool,
   ]
-}
-
-
-################################################################################
-# Route53 zones
-################################################################################
-module "zones" {
-  source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "~> 2.0"
-
-  zones = {
-    "${local.domain}" = {
-      comment = local.domain
-    }
-  }
-
-  tags = {
-    ManagedBy = "terraform"
-  }
 }

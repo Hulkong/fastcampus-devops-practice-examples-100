@@ -192,6 +192,9 @@ module "eks_blueprints_addons" {
   enable_karpenter                    = true
   enable_aws_load_balancer_controller = false
   enable_metrics_server               = true
+  enable_external_dns                 = false
+
+  # external_dns_route53_zone_arns = ["arn:aws:route53:::hostedzone/본인의 HostedZone ID"]
 
   karpenter = {
     repository_username = data.aws_ecrpublic_authorization_token.token.user_name
