@@ -71,12 +71,15 @@ terraform -chdir=../ plan
 terraform -chdir=../ apply --auto-approve
 
 # 1. S3에 접근하는 데모 파드 배포
-kubectl apply -f sample-pod.yaml
+kubectl apply -f sample-app.yaml
 
 # 2. S3에 업로드하는 경로 요청
 curl localhost:3000/upload
 
-# 3. 실습 환경 제거
+# 3. S3에 접근하는 데모 파드 배포
+kubectl delete -f sample-app.yaml
+
+# 4. 실습 환경 제거
 terraform -chdir=../ destroy --auto-approve
 ```
 

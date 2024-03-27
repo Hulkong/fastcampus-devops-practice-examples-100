@@ -1,3 +1,17 @@
+data "aws_iam_policy_document" "policy" {
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.test.arn}/*"]
+  }
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "test-s3-putobejct"
+  description = "A test putObejct policy"
+  policy      = data.aws_iam_policy_document.policy.json
+}
+
 module "iam_eks_role" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   role_name = "part01_test_role"
@@ -9,7 +23,7 @@ module "iam_eks_role" {
   oidc_providers = {
     one = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["default:sample-app"]
+      namespace_service_accounts = ["07-senario:sample-app"]
     }
   }
 }
