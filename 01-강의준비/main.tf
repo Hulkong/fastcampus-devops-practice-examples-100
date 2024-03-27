@@ -109,7 +109,7 @@ module "eks" {
   version = "~> 19.15"
 
   cluster_name                   = local.name
-  cluster_version                = "1.29"
+  cluster_version                = "1.28"
   cluster_endpoint_public_access = true
 
   vpc_id     = module.vpc.vpc_id
@@ -129,14 +129,14 @@ module "eks" {
       platform = "bottlerocket"
 
       instance_types = [
-        "t3.micro"
+        "t3.small"
       ]
 
       capacity_type = "ON_DEMAND"
 
       min_size     = 1
       max_size     = 5
-      desired_size = 4
+      desired_size = 3
     }
   }
 
@@ -190,7 +190,7 @@ module "eks_blueprints_addons" {
 
   enable_cluster_autoscaler           = true
   enable_karpenter                    = true
-  enable_aws_load_balancer_controller = true
+  enable_aws_load_balancer_controller = false
   enable_metrics_server               = true
 
   karpenter = {

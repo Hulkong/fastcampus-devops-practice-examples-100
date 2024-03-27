@@ -41,7 +41,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br><br>
 
-## 주요명령어
+## 주요 명령어
 
 ```bash
 terraform init                    # 테라폼 모듈 다운로드 및 초기화 작업 진행
@@ -52,11 +52,46 @@ terraform destroy                 # 테라폼으로 파일에 명시된 리소�
 kubectl config current-context    # 현재 나의 로컬환경에 연결되어 있는 클러스터 확인
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
+
+echo "GET {NGINX_로드밸런서_엔드포인트}" | vegeta attack -duration=240s -rate=100 | vegeta report    # 스트레스 테스트를 진행
+
 kubectl cordon {노드 이름}           # 해당 노드에 스케쥴링 될 수 없도록 함
 kubectl uncordon {노드 이름}         # 해당 노드에 스케쥴링 될 수 있도록 함
 kubectl drain {노드 이름}            # 해당 노드의 파드를 축출함
 kubectl drain {노드 이름} --ignore-daemonsets --force    # daemonset은 파드 축출 대상에서 제외
 ```
+
+<br><br>
+
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 샘플 애플리케이션 배포
+kubectl apply -f sample-app.yaml
+
+# 2. curl 명령어를 통해 샘플 애플리케이션 호출 테스트
+curl "http://$(kubectl get -n 08-senario ingress/nginx-ingress -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')"
+
+# 3. 서비스가 운영 중인 상황을 가장하기 위해 초당 5개씩 해당 샘플 애플리케이션에 트래픽을 전송함
+echo "GET http://$(kubectl get -n 08-senario ingress/nginx-ingress -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')" | vegeta attack -duration=240s -rate=5 | vegeta report
+
+# 4. 샘플 애플리케이션 삭제
+kubectl delete -f sample-app.yaml
+
+# 5. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|sample-app.yaml|EKS 버전 업그레이드 하는 동안 서비스의 다운타임을 체크할 샘플 애플리케이션|
 
 <br><br>
 

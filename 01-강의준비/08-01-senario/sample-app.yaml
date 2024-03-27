@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: nginx
+  name: 08-senario
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-nginx
-  namespace: nginx
+  namespace: 08-senario
 spec:
   selector:
     matchLabels:
       run: my-nginx
-  replicas: 2
+  replicas: 3
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -32,12 +32,22 @@ spec:
                   - /bin/sh
                   - "-c"
                   - sleep 15
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: run
+                operator: In
+                values:
+                - my-nginx
+            topologyKey: kubernetes.io/hostname
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: my-nginx
-  namespace: nginx
+  namespace: 08-senario
   labels:
     run: my-nginx
 spec:
@@ -54,7 +64,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
-  namespace: nginx
+  namespace: 08-senario
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing              
     alb.ingress.kubernetes.io/target-type: ip
@@ -72,3 +82,14 @@ spec:
                 name: my-nginx
                 port:
                   name: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: 08-senario
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      run: my-nginx
+

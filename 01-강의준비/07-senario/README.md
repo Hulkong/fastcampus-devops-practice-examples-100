@@ -76,7 +76,7 @@ kubectl apply -f sample-app.yaml
 # 2. S3에 업로드하는 경로 요청
 curl localhost:3000/upload
 
-# 3. S3에 접근하는 데모 파드 배포
+# 3. S3에 접근하는 데모 파드 삭제
 kubectl delete -f sample-app.yaml
 
 # 4. 실습 환경 제거
