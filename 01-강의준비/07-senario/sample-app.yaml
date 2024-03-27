@@ -28,6 +28,6 @@ kind: ServiceAccount
 metadata:
   name: sample-app
   namespace: 07-senario
-#   annotations:
-#     eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01_test_role"             # IRSA Role 사용
-#     # eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01-eks-pod-identity"    # Pod Itentity Role 사용
+  annotations:
+    # eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01_test_role"             # IRSA Role 사용
+    eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01-eks-pod-identity"    # Pod Itentity Role 사용

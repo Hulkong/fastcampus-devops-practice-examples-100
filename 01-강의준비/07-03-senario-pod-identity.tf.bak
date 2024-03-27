@@ -1,3 +1,17 @@
+data "aws_iam_policy_document" "policy" {
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.test.arn}/*"]
+  }
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "test-s3-putobejct"
+  description = "A test putObejct policy"
+  policy      = data.aws_iam_policy_document.policy.json
+}
+
 resource "aws_eks_pod_identity_association" "association" {
   cluster_name    = module.eks.cluster_name
   namespace       = "07-senario"
