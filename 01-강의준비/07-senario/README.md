@@ -21,7 +21,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 <br>
 
 ![IRSA_01](../../images/07-senario01.png)
-**[그림1. IRSA의 추상적인 적용 범위]**
+**[그림1. IRSA가 관여하는 추상적인 범위]**
 
 <br>
 
@@ -60,6 +60,37 @@ kubectl config current-context    # 현재 나의 로컬환경에 연결되어 �
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
 ```
+
+<br><br>
+
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. S3에 접근하는 데모 파드 배포
+kubectl apply -f sample-pod.yaml
+
+# 2. S3에 업로드하는 경로 요청
+curl localhost:3000/upload
+
+# 3. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|source|실습에서 사용할 애플리케이션의 소스들의 모음집|
+|sample-app.yaml|source 디렉토리 내부의 애플리케이션을 이용하여 S3에 접근하려는 리소스|
+|../07-00-s3.tf.bak|part01 테스트 s3 버킷 생성|
+|../07-01-senario-instanceprofile.tf.bak|InstanceProfile role 생성|
+|../07-02-senario-irsa.tf.bak|IRSA 권한 세팅|
+|../07-03-senario-pod-identity.tf.bak|pod-identity 권한 세팅|
 
 <br><br>
 

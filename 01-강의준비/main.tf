@@ -207,6 +207,29 @@ module "eks_blueprints_addons" {
   tags = local.tags
 }
 
+data "aws_iam_policy_document" "ebs_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:CreateVolume",
+      "ec2:CreateTags",
+      "ec2:AttachVolume"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "ebs_policy" {
+  name        = "part01-ebs-permission"
+  description = "A test putObejct policy"
+  policy      = data.aws_iam_policy_document.ebs_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_role" {
+  role       = module.eks_blueprints_addons.karpenter.node_iam_role_name
+  policy_arn = aws_iam_policy.ebs_policy.arn
+}
+
 
 ################################################################################
 # Karpenter

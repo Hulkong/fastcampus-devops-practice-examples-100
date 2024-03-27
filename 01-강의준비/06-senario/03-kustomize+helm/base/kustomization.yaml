@@ -9,6 +9,6 @@ helmGlobals:
   chartHome: ../../
 
 helmCharts:
-- name: helm
+- name: "02-helm"
   releaseName: kustomize-helm-guestbook
   valuesFile: ./values.yaml

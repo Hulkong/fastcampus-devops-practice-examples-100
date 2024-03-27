@@ -30,8 +30,8 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 - Terraform
 - EKS
-- helm
 - Karpenter
+- helm
 - Sample application
 
 <br><br>

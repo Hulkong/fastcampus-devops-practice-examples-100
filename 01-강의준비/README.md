@@ -110,3 +110,21 @@ https://helm.sh/docs/intro/install/
 # ex. macOS
 brew install helm
 ```
+
+<br>
+
+## Tips
+
+```bash
+# EKS 클러스터의 인증정보를 기반으로 나의 로컬의 kubeconfig를 업데이트 하는 명령어
+# 실제 kubectl과 같은 CLI를 사용할 때 필요합니다.
+aws eks --region {REGION명} update-kubeconfig --name {클러스터 명}
+aws eks --region us-west-2 update-kubeconfig --name part01
+
+# 쿠버네티스 컨텍스트를 설정하고자 할 때 다음과 같은 명령어를 사용해 주세요.
+## 다음 명령어로 현재 내 로컬에 설정되어 있는 context들을 확인합니다.
+kubectl config get-contexts
+
+## 위에서 확인한 컨텍스트를 기반으로 설정합니다.
+kubectl config use-context arn:aws:eks:us-west-2:{AWS Account ID}:cluster/part01
+```

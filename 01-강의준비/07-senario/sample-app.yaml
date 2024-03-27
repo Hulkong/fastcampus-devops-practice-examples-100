@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: 07-senario
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sample-app
+  namespace: 07-senario
 spec:
   replicas: 1
   selector:
@@ -21,7 +27,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: sample-app
-  namespace: default
-  annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01_test_role"             # IRSA Role 사용
-    # eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01-eks-pod-identity"    # Pod Itentity Role 사용
+  namespace: 07-senario
+#   annotations:
+#     eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01_test_role"             # IRSA Role 사용
+#     # eks.amazonaws.com/role-arn: "arn:aws:iam::760230531610:role/part01-eks-pod-identity"    # Pod Itentity Role 사용

@@ -26,7 +26,7 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 <br>
 
 ![helm_01](../../images/06-senario02.png)
-**[그림2. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용할 필요가 있을 때, helm를 사용]**
+**[그림2.모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용할 필요가 있을 때, helm를 사용]**
 
 <br>
 
@@ -59,7 +59,7 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 
 1. 규모가 작은 기업에서 데브옵스 엔지니어가 모든 서비스의 GitOps를 관리할 경우, `kustomize`를 사용하자.
 2. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용할 필요가 있거나, 팀 별로 각 서비스를 구성하는 k8s 리소스들이 어느 정도 정해져 있으면 `Helm`으로 통합 관리하자.
-3. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용하고, 커스텀을 쉽게 진행하기 위해서, `kustomize + helm`를 사용하자.
+3. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용하고, 커스텀을 쉽게 진행하기 위해서, `helm + kustomize`를 사용하자.
 
 <br><br>
 
@@ -90,26 +90,26 @@ kustomize build . --enable-helm | kubectl delete -f -    # 클러스터에 배�
 ## 실제 실습 명령어
 
 ```bash
-# 1-1. kustomize로 dev 환경의 서비스 배포 및 삭제
-kustomize build ./01-kustomize/dev | kubectl apply -f -
-kustomize build ./01-kustomize/dev | kubectl delete -f -
-
-# 1-2. kustomize로 prod 환경의 서비스 배포 및 삭제
-kustomize build ./01-kustomize/prod | kubectl apply -f -
-kustomize build ./01-kustomize/prod | kubectl delete -f -
-
-# 2. 헬름으로 서비스 배포 및 삭제
-helm template demo ./02-helm
-helm install demo ./02-helm
+# 1. 헬름으로 서비스 배포 및 삭제
+helm template demo ./helm
+helm install demo ./helm
 helm delete demo
 
+# 2-1. kustomize로 dev 환경의 서비스 배포 및 삭제
+kustomize build ./kustomize/dev | kubectl apply -f -
+kustomize build ./kustomize/dev | kubectl delete -f -
+
+# 2-2. kustomize로 prod 환경의 서비스 배포 및 삭제
+kustomize build ./kustomize/prod | kubectl apply -f -
+kustomize build ./kustomize/prod | kubectl delete -f -
+
 # 3-1. kustomize+helm으로 dev 환경의 서비스 배포 및 삭제
-kustomize build ./03-kustomize+helm/dev --enable-helm | kubectl apply -f -
-kustomize build ./03-kustomize+helm/dev --enable-helm | kubectl delete -f -
+kustomize build ./kustomize+helm/dev --enable-helm | kubectl apply -f -
+kustomize build ./kustomize+helm/dev --enable-helm | kubectl delete -f -
 
 # 3-2. kustomize+helm으로 prod 환경의 서비스 배포 및 삭제
-kustomize build ./03-kustomize+helm/prod --enable-helm | kubectl apply -f -
-kustomize build ./03-kustomize+helm/prod --enable-helm | kubectl delete -f -
+kustomize build ./kustomize+helm/prod --enable-helm | kubectl apply -f -
+kustomize build ./kustomize+helm/prod --enable-helm | kubectl delete -f -
 ```
 
 <br><br>
@@ -117,9 +117,9 @@ kustomize build ./03-kustomize+helm/prod --enable-helm | kubectl delete -f -
 ## 파일 설명
 |디렉토리명|설명|
 |---|---|
-|01-kustomize|kustomize로 k8s 리소스를 배포하기 위한 디렉토리|
-|02-helm|helm으로 k8s 리소스를 배포하기 위한 디렉토리|
-|03-kustomize+helm|kustomize와 helm을 사용하여 k8s 리소스를 배포하기 위한 디렉토리|
+|helm|helm으로 k8s 리소스를 배포하기 위한 디렉토리|
+|kustomize|kustomize로 k8s 리소스를 배포하기 위한 디렉토리|
+|kustomize+helm|kustomize와 helm을 사용하여 k8s 리소스를 배포하기 위한 디렉토리|
 
 <br><br>
 

@@ -64,13 +64,24 @@ docker push {도커 저장소:태그}                                 # 도커 �
 
 <br><br>
 
+## 실제 실습 명령어
+
+```bash
+# 시나리오1 실습을 진행하기 위한 메니페스트 적용
+kubectl apply -f fail-livenessprobe-cuz-db.yaml
+kubectl delete -f fail-livenessprobe-cuz-db.yaml
+
+# 시나리오2 실습을 진행하기 위한 메니페스트 적용
+kubectl apply -f fail-livenessprobe-cuz-CPU-throttle.yaml
+kubectl delete -f fail-livenessprobe-cuz-CPU-throttle.yaml
+```
+
+<br><br>
+
 ## 파일 설명
 |파일명|설명|
 |---|---|
-|app.js|실습에서 사용할 애플리케이션 소스파일|
-|Dockerfile|실습에서 사용할 애플리케이션을 컨테이너라이징|
-|package.json|app.js에서 사용할 라이브러리 버전 명시|
-|package-lock.json|라이브러리를 설치한 시점의 의존성 트리에 대한 정확한 정보|
+|source|실습에서 사용할 애플리케이션 소스파일|
 |fail-livenessprobe-cuz-db.yaml|DB 연결 오류로, 앱의 livenessProbe를 실패하게 하는 실습 코드|
 |fail-livenessprobe-cuz-CPU-throttle.yaml|CPU 쓰로틀링으로, 앱의 livenessProbe를 실패하게 하는 실습 코드|
 
