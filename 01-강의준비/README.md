@@ -133,7 +133,7 @@ kubectl config use-context arn:aws:eks:us-west-2:{AWS Account ID}:cluster/part01
 
 ## 주의사항
 
-- 모든 리소스 정리시, 항상 EKS 내의 모든 리소스를 제거 후에 `terraform destroy`를 진행해 주세요. 예를 들어, Ingress로 생성한 ALB가 먼저 삭제되지 않으면, `terraform destroy`을 사용해도 정상적으로 리소스가 제거되지 않습니다.
+- 모든 리소스 정리시, 항상 EKS 내의 모든 리소스를 제거 후에 `terraform destroy`를 진행해 주세요. 예를 들어, 메니페스트 Ingress로 생성한 ALB가 먼저 삭제되지 않으면, `terraform destroy`을 사용해도 정상적으로 리소스가 제거되지 않습니다.
 
 - Terraform으로 실습환경 구축시, 다음과 같이 AWS loadbalancer 쪽에 문제가 있을 경우, terraform apply 명령어를 재실행 해주거나, main.tf의 EKS module 내부의 cluster_addons에서 `aws-ebs-csi-driver` 필드를 주석치고 먼저 프로비저닝 한 다음, 다시 주석을 해제하고 다시 apply 해보세요.
 ```text
