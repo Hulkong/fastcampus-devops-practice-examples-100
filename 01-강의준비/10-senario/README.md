@@ -56,6 +56,9 @@ helm template {relase 이름} {차트가 포함된 DIR}                  # 실�
 helm template {relase 이름} {차트가 포함된 DIR} > output.yaml    # 실제 클러스터 환경에 적용되기 전 dry-run과 같이 메니페스트를 파일에 출력
 helm install {release 이름} {차트가 포함된 DIR}                  # 클러스터 환경에 helm 차트를 배포
 helm upgrade --install {차트가 포함된 DIR}                      # 클러스터 환경에 helm 차트를 배포하거나 업데이트
+
+docker build --platform linux/amd64 . -t {도커 저장소:태그}    # {도커 저장소:태그}이름을 가진 이미지를 현재 경로의 Dockerfile을 기준으로 만듬
+docker push {도커 저장소:태그}                                 # 도커 저장소에 이미지를 업로드
 ```
 
 <br><br>

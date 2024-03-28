@@ -59,6 +59,9 @@ terraform destroy                 # 테라폼으로 파일에 명시된 리소�
 kubectl config current-context    # 현재 나의 로컬환경에 연결되어 있는 클러스터 확인
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
+
+docker build --platform linux/amd64 . -t {도커 저장소:태그}    # {도커 저장소:태그}이름을 가진 이미지를 현재 경로의 Dockerfile을 기준으로 만듬
+docker push {도커 저장소:태그}                                 # 도커 저장소에 이미지를 업로드
 ```
 
 <br><br>
