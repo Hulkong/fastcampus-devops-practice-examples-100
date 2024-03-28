@@ -63,14 +63,21 @@ helm upgrade --install {차트가 포함된 DIR}                      # 클러�
 ## 실제 실습 명령어
 
 ```bash
-# namespace 생성
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. namespace 생성
 kubectl create ns 10-senario
 
-# umbrella helm 차트로 frontend, backend, db 배포
+# 2. umbrella helm 차트로 frontend, backend, db 배포
 helm install my-10-senario umbrella-helm-chart --namespace 10-senario
 
-# umbrella helm 차트 삭제
+# 3. umbrella helm 차트 삭제
 helm delete my-10-senario --namespace 10-senario
+
+# 4. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
 ```
 
 <br><br>

@@ -67,6 +67,10 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 ## 실제 실습 명령어
 
 ```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
 # 1. catalog 배포
 kubectl apply -f 01-catalog.yaml
 
@@ -87,6 +91,9 @@ kubectl apply -f 06-ui.yaml
 
 # 7. UI 엔드포인트 주소 조회
 kubectl get svc ui
+
+# 8. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
 ```
 
 <br><br>

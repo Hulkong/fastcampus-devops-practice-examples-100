@@ -67,13 +67,20 @@ docker push {도커 저장소:태그}                                 # 도커 �
 ## 실제 실습 명령어
 
 ```bash
-# 시나리오1 실습을 진행하기 위한 메니페스트 적용
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 시나리오1 실습을 진행하기 위한 메니페스트 적용
 kubectl apply -f fail-livenessprobe-cuz-db.yaml
 kubectl delete -f fail-livenessprobe-cuz-db.yaml
 
-# 시나리오2 실습을 진행하기 위한 메니페스트 적용
+# 2. 시나리오2 실습을 진행하기 위한 메니페스트 적용
 kubectl apply -f fail-livenessprobe-cuz-CPU-throttle.yaml
 kubectl delete -f fail-livenessprobe-cuz-CPU-throttle.yaml
+
+# 3. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
 ```
 
 <br><br>

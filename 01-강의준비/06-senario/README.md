@@ -90,6 +90,10 @@ kustomize build . --enable-helm | kubectl delete -f -    # 클러스터에 배�
 ## 실제 실습 명령어
 
 ```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
 # 1-1. kustomize로 dev 환경의 서비스 배포 및 삭제
 kustomize build ./01-kustomize/dev | kubectl apply -f -
 kustomize build ./01-kustomize/dev | kubectl delete -f -
@@ -110,6 +114,9 @@ kustomize build ./03-kustomize+helm/dev --enable-helm | kubectl delete -f -
 # 3-2. kustomize+helm으로 prod 환경의 서비스 배포 및 삭제
 kustomize build ./03-kustomize+helm/prod --enable-helm | kubectl apply -f -
 kustomize build ./03-kustomize+helm/prod --enable-helm | kubectl delete -f -
+
+# 4. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
 ```
 
 <br><br>

@@ -60,6 +60,30 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 
 <br><br>
 
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 실습에 필요한 파드 배포 및 삭제
+kubectl apply -f test-pause-pod.yaml
+kubectl delete -f test-pause-pod.yaml
+
+# 2. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|test-pause-pod.yaml|Karpenter가 정상적으로 노드를 스케일하도록 진행하기 위한 샘플 메니페스트|
+
+<br><br>
+
 ## 참고
 - [Karpenter](https://karpenter.sh/)
 - [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md)

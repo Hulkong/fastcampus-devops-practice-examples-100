@@ -60,3 +60,39 @@ kubectl config current-context    # 현재 나의 로컬환경에 연결되어 �
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
 ```
+
+<br><br>
+
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 각 실습에 필요한 파드 배포 및 삭제
+kubectl apply -f 01-ResourceQuotaMemory.yaml
+kubectl delete -f 01-ResourceQuotaMemory.yaml
+
+kubectl apply -f 02-ResourceQuotaCPU.yaml
+kubectl delete -f 02-ResourceQuotaCPU.yaml
+
+kubectl apply -f 03-InitContainerIssue.yaml
+kubectl delete -f 03-InitContainerIssue.yaml
+
+kubectl apply -f 04-FinalizerIssue.yaml
+kubectl delete -f 04-FinalizerIssue.yaml
+
+# 2. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|01-ResourceQuotaMemory.yaml|메모리 제한으로 인해 파드를 stuck 상태로 만드는 메니페스트|
+|02-ResourceQuotaCPU.yaml|CPU 제한으로 인해 파드를 stuck 상태로 만드는 메니페스트|
+|03-InitContainerIssue.yaml|InitContainer의 오류로 파드를 stuck 상태로 만드는 메니페스트|
+|04-FinalizerIssue.yaml|Finalizer의 이슈로 인해 파드를 stuck 상태로 만드는 메니페스트|

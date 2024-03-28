@@ -56,3 +56,36 @@ kubectl config current-context    # 현재 나의 로컬환경에 연결되어 �
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
 ```
+
+<br><br>
+
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 각 실습에 필요한 파드 배포 및 삭제
+kubectl apply -f test-cpu-example.yaml
+kubectl delete -f test-cpu-example.yaml
+
+kubectl apply -f test-overprovisioning.yaml
+kubectl delete -f test-overprovisioning.yaml
+
+# 2. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|test-cpu-example.yaml|CPU 부하를 발생시키는 메니페스트|
+|test-overprovisioning.yaml|오버프로비저닝 메니페스트|
+
+<br><br>
+
+## 참고
+- [Cluster Over-Provisioning](https://www.eksworkshop.com/docs/autoscaling/compute/cluster-autoscaler/overprovisioning/)

@@ -67,3 +67,34 @@ kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티�
 
 echo "GET {NGINX_로드밸런서_엔드포인트}" | vegeta attack -duration=240s -rate=100 | vegeta report    # 스트레스 테스트를 진행
 ```
+
+<br><br>
+
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 실습에 필요한 파드 배포 및 삭제
+kubectl apply -f test-nginx.yaml
+kubectl delete -f test-nginx.yaml
+
+# 2. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|test-nginx.yaml|실습에서 사용할 nginx 메니페스트|
+
+<br><br>
+
+## 참고
+
+- [vegeta 스트레스 툴](https://github.com/tsenart/vegeta)
+- [preStop과 terminationGracePeriodSeconds](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)

@@ -60,3 +60,44 @@ kubectl config current-context    # 현재 나의 로컬환경에 연결되어 �
 kubectl apply -f {파일명}           # yaml 파일에 기재된 쿠버네티스 리소스들을 생성
 kubectl delete -f {파일명}          # yaml 파일에 기재된 쿠버네티스 리소스들을 삭제
 ```
+
+<br><br>
+
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축
+terraform -chdir=../ plan 
+terraform -chdir=../ apply --auto-approve
+
+# 1. 각 실습에 필요한 파드 배포 및 삭제
+kubectl apply -f 01-CrashLoopBackOff.yaml
+kubectl delete -f 01-CrashLoopBackOff.yaml
+
+kubectl apply -f 02-ImagePullBackOff.yaml
+kubectl delete -f 02-ImagePullBackOff.yaml
+
+kubectl apply -f 03-OOM.yaml
+kubectl delete -f 03-OOM.yaml
+
+kubectl apply -f 04-Evicted.yaml
+kubectl delete -f 04-Evicted.yaml
+
+# 2. 실습 환경 제거
+terraform -chdir=../ destroy --auto-approve
+```
+
+<br><br>
+
+## 파일 설명
+|파일명|설명|
+|---|---|
+|01-CrashLoopBackOff.yaml|CrashLoopBackOff 발생시키는 메니페스트|
+|02-ImagePullBackOff.yaml|ImagePullBackOff 발생시키는 메니페스트|
+|03-OOM.yaml|Out of Memory를 발생시키는 메니페스트|
+|04-Evicted.yaml|파드를 축출하는 실습을 진행하기 위한 메니페스트|
+
+<br><br>
+
+## 참고
+- [애플리케이션 트러블슈팅하기](https://kubernetes.io/ko/docs/tasks/debug/debug-application/)
