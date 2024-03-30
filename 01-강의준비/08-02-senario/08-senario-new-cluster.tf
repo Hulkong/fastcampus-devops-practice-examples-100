@@ -204,6 +204,15 @@ module "eks_blueprints_addons" {
     iam_role_use_name_prefix = false
   }
 
+  aws_load_balancer_controller = {
+    set = [
+      {
+        name  = "enableServiceMutatorWebhook"
+        value = false
+      }
+    ]
+  }
+
   tags = local.tags
 }
 
