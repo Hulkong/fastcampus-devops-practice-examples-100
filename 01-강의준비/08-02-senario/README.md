@@ -48,29 +48,30 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 terraform -chdir=../ plan 
 terraform -chdir=../ apply --auto-approve
 
-# 1. 기존 버전의 EKS 클러스터에 샘플 애플리케이션 배포
+# 1. 쿠버네티스 리소스의 생성을 확인
+watch kubectl get all --namespace 08-senario
+
+# 2. 기존 버전의 EKS 클러스터에 샘플 애플리케이션 배포
 kubectl apply -f ../08-01-senario/sample-app.yaml
 
-# 2. curl 명령어를 통해 샘플 애플리케이션 호출 테스트
-curl "http://part01-senario8.hulkong.shop"
+# 3. curl 명령어를 통해 샘플 애플리케이션 호출 테스트
+watch -n 2 curl "http://$(kubectl get -n 08-senario ingress/nginx-ingress -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')"
 
-# 3. 서비스가 운영 중인 상황을 가장하기 위해 초당 5개씩 1000s 동안 해당 샘플 애플리케이션에 트래픽을 전송함
-echo "GET http://part01-senario8.hulkong.shop" | vegeta attack -duration=1000s -rate=5 | vegeta report
+# 4. 50:50으로 DNS 리졸빙을 진행하는지 확인
+# 본인의 도메인으로 변경해주세요.
+watch -n 2 dig +short "$(kubectl get ingress nginx-ingress -n 08-senario -o jsonpath="{.metadata.annotations['external-dns\.alpha\.kubernetes\.io/hostname']}")"
 
-# 4. 신규 버전의 EKS 클러스터와 가중치 전환을 위한 Routet53에 Hosted Zone 생성
+# 5. 신규 버전의 EKS 클러스터와 가중치 전환을 위한 Routet53에 Hosted Zone 생성
 terraform apply --auto-approve
 
-# 5. 신규 클러스터에 접근하기 위한 kubeconfig 파일 업데이트
+# 6. 신규 클러스터에 접근하기 위한 kubeconfig 파일 업데이트
 aws eks --region us-west-2 update-kubeconfig --name part01-new
 
-# 6. 현재 나의 로컬환경에 설정된 클러스터의 컨텍스트가 무엇인지 확인
+# 7. 현재 나의 로컬환경에 설정된 클러스터의 컨텍스트가 무엇인지 확인
 kubectl config current-context
 
-# 7. 신규 클러스터에 샘플 애플리케이션 배포
+# 8. 신규 클러스터에 샘플 애플리케이션 배포
 kubectl apply -f sample-app-new.yaml
-
-# 8. curl 명령어를 통해 새로운 클러스터의 샘플 애플리케이션 호출 테스트
-curl "http://$(kubectl get -n 08-senario ingress/nginx-ingress -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')"
 
 # 9. 샘플 애플리케이션 삭제
 kubectl delete -f sample-app-new.yaml
@@ -102,3 +103,4 @@ terraform -chdir=../ destroy --auto-approve
 - [freenom](https://www.freenom.com/)
 - [도메인 등록 대행 및 서버 호스팅(가비아)](https://www.gabia.com/)
 - [ExternalDNS](https://github.com/kubernetes-sigs/external-dns)
+- [dig 명령](https://ko.wikipedia.org/wiki/Dig#:~:text=dig%20(domain%20information%20groper)%EB%8A%94,%EB%AA%85%EB%A0%B9%20%EC%A4%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%20%ED%88%B4%EC%9D%B4%EB%8B%A4.&text=dig%EB%8A%94%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85,%EC%97%90%EC%84%9C%20%EC%9E%91%EB%8F%99%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8B%A4.)

@@ -59,10 +59,10 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/load-balancer-name: part01-nginx-new             # aws loadbalancer controller가 해당 annotation을 읽고, 로드밸런서 이름을 설정함 
-    external-dns.alpha.kubernetes.io/hostname: part01-senario8.hulkong.shop    # external-dns가 해당 annotation을 읽고, route53의 해당 zone에 hostname을 레코드로 등록함
-    external-dns.alpha.kubernetes.io/set-identifier: part01-nginx-new          # Route53의 가중치 기반 라우팅에서 각 동일한 레코드를 구분하기 위한 식별자 지정
-    external-dns.alpha.kubernetes.io/aws-weight: "30"                           # Route53의 가중치 기반 라우팅에서 가중치 값을 설정
+    alb.ingress.kubernetes.io/load-balancer-name: part01-nginx-new # aws loadbalancer controller가 해당 annotation을 읽고, 로드밸런서 이름을 설정함
+    external-dns.alpha.kubernetes.io/hostname: part01-senario8.hulkong.shop # external-dns가 해당 annotation을 읽고, route53의 해당 zone에 hostname을 레코드로 등록함
+    external-dns.alpha.kubernetes.io/set-identifier: part01-nginx-new # Route53의 가중치 기반 라우팅에서 각 동일한 레코드를 구분하기 위한 식별자 지정
+    external-dns.alpha.kubernetes.io/aws-weight: "50" # Route53의 가중치 기반 라우팅에서 가중치 값을 설정
 spec:
   ingressClassName: alb
   rules:
