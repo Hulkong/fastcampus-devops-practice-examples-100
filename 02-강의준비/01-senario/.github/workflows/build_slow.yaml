@@ -1,0 +1,37 @@
+# Here's a breakdown of what it does:
+
+#   It triggers on every push and pull request.
+#   It runs the jobs on the latest version of Ubuntu.
+#   It uses a matrix strategy to test against a single version of Node.js (14.x).
+#   It checks out your repository using actions/checkout@v2.
+#   It installs dependencies without caching them, which means it will download all dependencies every time it runs, slowing down the workflow.
+#   It runs tests and builds in separate steps, which can be slower than running them in parallel or in a single step.
+#   It doesn't build or push a Docker image, which could be part of a more efficient workflow if your application is containerized.
+#   If you want to make this workflow more efficient, you could cache dependencies, run tests and builds in parallel or in a single step, and build and push a Docker image if applicable.
+
+name: Node.js CI (Inefficient Example)
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x] # 단일 버전만 사용
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # 의존성 캐싱을 하지 않음
+    - name: Install Dependencies
+      run: npm install
+
+    # 단일 작업에서 모든 테스트 및 빌드를 순차적으로 실행
+    - name: Run Tests
+      run: npm test
+
+    - name: Build
+      run: npm run build
+
+    # Docker 이미지 빌드 및 푸시 단계를 생략함 (비효율적 예시에서는 포함되지 않음)

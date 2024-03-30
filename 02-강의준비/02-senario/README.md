@@ -1,6 +1,6 @@
 # CH16_03. 시나리오 설명 및 실습
 > **주의사항**
-내용을 입력해주세요.
+이 방법은 Docker Hub의 풀 제한을 시험하기 위한 것입니다. 실제 운영 환경이나 공개적인 서비스에서 이러한 테스트를 수행하는 것은 제한 조건을 위반하는 행위가 될 수 있으므로 주의해야 합니다. 또한, 이미지 풀 제한에 도달하면, 해당 IP 주소에서는 더 이상 이미지를 풀할 수 없게 됩니다. 이는 일시적으로 서비스에 영향을 줄 수 있으므로, 테스트 환경에서만 실행해야 합니다. 그리고 Docker Hub의 풀 제한 정책은 변경될 수 있으므로, 테스트를 실행하기 전에 최신 정책을 확인하세요.
 
 <br>
 
@@ -26,7 +26,12 @@
 
 ## 시나리오
 
-내용을 입력해주세요.
+1. Use a minimal base image
+2. Combine RUN commands
+3. Leverage Multi-Stage builds
+4. Remove unnecessary files
+5. Optimize docker build cache
+6. Use .dockerignore
 
 <br><br>
 

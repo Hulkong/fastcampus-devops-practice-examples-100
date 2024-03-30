@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pull-limit-test
+spec:
+  containers:
+  - name: pull-limit-test-container
+    image: hulkong/fastcampus-devops-practice-examples-100:tagname

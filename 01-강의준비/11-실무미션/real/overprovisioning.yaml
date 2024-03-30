@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overprovisioning
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: overprovisioning
+  template:
+    metadata:
+      labels:
+        app: overprovisioning
+    spec:
+      terminationGracePeriodSeconds: 0
+      priorityClassName: overprovisioning
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       - labelSelector:
+      #           matchExpressions:
+      #             - key: app
+      #               operator: In
+      #               values:
+      #                 - overprovisioning
+      #         topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: overprovisioning
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 512Mi
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: overprovisioning
+value: -1
+globalDefault: false
+description: "Priority class used by overprovisioning."
