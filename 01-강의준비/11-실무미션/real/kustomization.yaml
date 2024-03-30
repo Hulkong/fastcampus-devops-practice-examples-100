@@ -6,8 +6,9 @@ namespace: 11-senario
 resources:
   - ../base
   - namespace.yaml
-  - hpa.yaml
-  - overprovisioning.yaml
+  - ingress.yaml
+  # - hpa.yaml
+  # - overprovisioning.yaml
 
 patches:
   - path: ui.yaml

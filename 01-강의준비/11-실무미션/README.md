@@ -83,19 +83,22 @@ terraform -chdir=../ apply --auto-approve
 # 1. 실습 쇼핑몰 배포
 kustomize build ./real | kubectl apply -f -
 
-# 2. UI 엔드포인트 주소 조회
-kubectl get -n 11-senario svc ui
+# 2. 쇼핑몰 애플리케이션 배포 확인
+watch kubectl get all --namespace 11-senario
 
-# 3. curl 명령어를 통해 쇼핑몰 UI 호출 테스트
-curl "http://$(kubectl get -n 11-senario service/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')"
+# 3. UI 엔드포인트 주소 조회
+kubectl get -n 11-senario ing ui
 
-# 4. 쇼핑몰에 초당 80개씩 1000s 동안 해당 쇼핑몰 UI 트래픽을 전송함
-echo "GET http://$(kubectl get -n 11-senario service/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')" | vegeta attack -duration=1000s -rate=100 | vegeta report
+# 4. curl 명령어를 통해 쇼핑몰 UI 호출 테스트
+watch -n 2 curl "http://$(kubectl get -n 11-senario ingress/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')/actuator/health/readiness"
 
-# 5. 실습 쇼핑몰 삭제
+# 5. 쇼핑몰에 초당 80개씩 1000s 동안 해당 쇼핑몰 UI 트래픽을 전송함
+echo "GET http://$(kubectl get -n 11-senario ingress/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')" | vegeta attack -duration=1000s -rate=100 | vegeta report
+
+# 6. 실습 쇼핑몰 삭제
 kustomize build ./real | kubectl delete -f -
 
-# 8. 실습 환경 제거
+# 7. 실습 환경 제거
 terraform -chdir=../ destroy --auto-approve
 ```
 
