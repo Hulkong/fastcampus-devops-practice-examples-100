@@ -79,10 +79,13 @@ kubectl delete -f sample-app-new.yaml
 # 10. 신규 클러스터 제거
 terraform destroy --auto-approve
 
-# 11. 기존 애플리케이션 삭제
+# 11. 기존 클러스터로 컨텍스트 변경
+kubectl config use-context arn:aws:eks:us-west-2:{본인의 AccountID}:cluster/part01
+
+# 12. 기존 애플리케이션 삭제
 kubectl delete -f ../08-01-senario/sample-app.yaml
 
-# 12. 실습 환경 제거
+# 13. 기존 클러스터 제거
 terraform -chdir=../ destroy --auto-approve
 ```
 
