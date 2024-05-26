@@ -92,7 +92,7 @@ metadata:
     app.kuberneres.io/owner: retail-store-sample
     app.kubernetes.io/managed-by: Helm
 spec:
-  replicas: 1
+  replicas: 3
   strategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -137,7 +137,7 @@ spec:
           securityContext:
             capabilities:
               drop:
-              - ALL
+                - ALL
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
@@ -147,12 +147,12 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8080
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 3
           resources:
             limits:
               memory: 256Mi
@@ -222,5 +222,5 @@ spec:
               containerPort: 3306
               protocol: TCP
       volumes:
-      - name: data
-        emptyDir: {}
+        - name: data
+          emptyDir: {}

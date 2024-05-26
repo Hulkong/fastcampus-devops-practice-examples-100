@@ -99,9 +99,9 @@ spec:
           securityContext:
             capabilities:
               add:
-              - NET_BIND_SERVICE
+                - NET_BIND_SERVICE
               drop:
-              - ALL
+                - ALL
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
@@ -113,12 +113,12 @@ spec:
               protocol: TCP
 
           # Spring actuator는 외부 라이브러리의 health check도 진행하기에 예상치 못한 이슈가 발생할 수 있으니, 완벽한 통제 내에 없으면 사용하지 않는 것을 추천
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8080
-            initialDelaySeconds: 45
-            periodSeconds: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /actuator/health/liveness
+          #     port: 8080
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 3
 
           # 차후 모니터링을 통해서, 리소스 limit과 requets의 임계치를 동일하게 설정하여 QoS를 guaranteed로 설정하자!
           resources:

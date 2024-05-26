@@ -18,7 +18,7 @@ kind: ConfigMap
 metadata:
   name: assets
 data:
-  PORT: '8080'
+  PORT: "8080"
 ---
 # Source: assets/templates/service.yaml
 apiVersion: v1
@@ -78,8 +78,7 @@ spec:
         app.kuberneres.io/owner: retail-store-sample
     spec:
       serviceAccountName: assets
-      securityContext:
-        {}
+      securityContext: {}
       containers:
         - name: assets
           envFrom:
@@ -88,7 +87,7 @@ spec:
           securityContext:
             capabilities:
               drop:
-              - ALL
+                - ALL
             readOnlyRootFilesystem: false
           image: "public.ecr.aws/aws-containers/retail-store-sample-assets:0.7.1"
           imagePullPolicy: IfNotPresent
@@ -96,12 +95,12 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /health.html
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health.html
+          #     port: 8080
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 3
           resources:
             limits:
               memory: 128Mi

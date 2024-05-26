@@ -3,28 +3,33 @@ kind: Deployment
 metadata:
   name: ui
 spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 0
   template:
     spec:
       containers:
         - name: ui
           # 서비스의 가용성을 높이기 위해서 readinessProbe 활용하자!
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8080
-            periodSeconds: 5
-            timeoutSeconds: 5
-            failureThreshold: 3
-            successThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     path: /actuator/health/readiness
+          #     port: 8080
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
+          #   failureThreshold: 3
+          #   successThreshold: 3
           # Graceful shutdown을 위한 설정2
-          # lifecycle:
-          #   preStop:
-          #     exec:
-          #       command:
-          #         - /bin/sh
-          #         - "-c"
-          #         - sleep 80
-      # Graceful shutdown을 위한 설정1
+      #     lifecycle:
+      #       preStop:
+      #         exec:
+      #           command:
+      #             - /bin/sh
+      #             - "-c"
+      #             - sleep 80
       # terminationGracePeriodSeconds: 90
 ---
 apiVersion: v1

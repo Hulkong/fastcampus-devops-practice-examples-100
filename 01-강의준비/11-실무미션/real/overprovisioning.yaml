@@ -14,24 +14,24 @@ spec:
     spec:
       terminationGracePeriodSeconds: 0
       priorityClassName: overprovisioning
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       - labelSelector:
-      #           matchExpressions:
-      #             - key: app
-      #               operator: In
-      #               values:
-      #                 - overprovisioning
-      #         topologyKey: "kubernetes.io/hostname"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - overprovisioning
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - name: overprovisioning
           image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
           resources:
             limits:
-              memory: 512Mi
+              memory: 100Mi
             requests:
-              memory: 512Mi
+              memory: 100Mi
 ---
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass

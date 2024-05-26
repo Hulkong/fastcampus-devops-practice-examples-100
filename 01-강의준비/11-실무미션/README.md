@@ -50,11 +50,10 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 ![Architecture](../../images/12-architecture.png)
 **[그림3. 샘플 쇼핑몰 서비스에 대한 아키텍쳐]**
 
-- **🔧 기타**: 위의 시나리오에 더해 서비스의 가용성을 높이기 위해서 readinessProbe를 적용합니다.
 - **🎯 첫 번째 시나리오**: 파드가 스케일 아웃되지 않는 상황에서, 트래픽을 주어 서비스의 장애가 일어나게 합니다. 이에 대한 해결책으로 파드를 스케일 아웃하는 HPA와 노드를 스케일 아웃하는 karpenter를 이용하여 트래픽 유입에 따라 적절하게 파드를 스케일 아웃해봅니다.
-- **🔧 기타**: 오버 프로비저닝 파드 적용.
-- **🔧 기타**: ALB 알고리즘 변경
-- **🎯 두 번째 시나리오**: 트래픽이 유입되는 상황에서, 배포 및 스케일 인 등의 파드가 재시작 될 때, 500번대 에러를 발생시켜 봅니다. 이에 대한 해결책으로 preStop과 terminationGracePeriodSeconds을 이용하여 문제를 해결해 보도록 합니다.
+- **🎯 두 번째 시나리오**: 서비스의 가용성을 높이기 위해서 readinessProbe를 적용합니다.
+- **🎯 세 번째 시나리오**: 급격히 증가하는 트래픽에 유연하게 대응하기 위해서 오버프로비저닝 파드를 이용합니다.
+- **🎯 네 번째 시나리오**: 트래픽이 유입되는 상황에서, 배포 및 스케일 인 등의 파드가 재시작 될 때, 500번대 에러를 발생시켜 봅니다. 이에 대한 해결책으로 preStop과 terminationGracePeriodSeconds을 이용하여 문제를 해결해 보도록 합니다.
 
 <br><br>
 
@@ -92,8 +91,8 @@ kubectl get -n 11-senario ing ui
 # 4. curl 명령어를 통해 쇼핑몰 UI 호출 테스트
 watch -n 2 curl "http://$(kubectl get -n 11-senario ingress/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')/actuator/health/readiness"
 
-# 5. 쇼핑몰에 초당 80개씩 1000s 동안 해당 쇼핑몰 UI 트래픽을 전송함
-echo "GET http://$(kubectl get -n 11-senario ingress/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')" | vegeta attack -duration=1000s -rate=100 | vegeta report
+# 5. 쇼핑몰에 초당 50개씩 120s 동안 해당 쇼핑몰 UI 트래픽을 전송함
+echo "GET http://$(kubectl get -n 11-senario ingress/ui -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')" | vegeta attack -duration=120s -rate=50 | vegeta report
 
 # 6. 실습 쇼핑몰 삭제
 kustomize build ./real | kubectl delete -f -
@@ -107,12 +106,19 @@ terraform -chdir=../ destroy --auto-approve
 ## 📁 파일 설명
 |파일명|언어|설명|
 |---|---|---|
-|01-catalog.yaml|Java|Product catalog API|
-|02-carts.yaml|Go|User shopping carts API|
-|03-orders.yaml|Java|User orders API|
-|04-checkout.yaml|Java|API to orchestrate the checkout process|
-|05-assets.yaml|Node|Serves static assets like images related to the product catalog|
-|06-ui.yaml|NginX|Aggregates API calls to the various other services and renders the HTML UI.|
+|base|-|쇼핑몰 애플리케이션의 기본 뼈대|
+|base/01-catalog.yaml|Java|Product catalog API|
+|base/02-carts.yaml|Go|User shopping carts API|
+|base/03-orders.yaml|Java|User orders API|
+|base/04-checkout.yaml|Java|API to orchestrate the checkout process|
+|base/05-assets.yaml|Node|Serves static assets like images related to the product catalog|
+|base/06-ui.yaml|NginX|Aggregates API calls to the various other services and renders the HTML UI.|
+|real|-|커스터마이징을 하기 위한 파일들의 모음집|
+|real/kustomization.yaml|-|kustomize를 적용시키기 위한 파일|
+|real/hpa.yaml|-|HPA 리소스를 생성하기 위한 파일|
+|real/ingress.yaml|-|외부에서 접근하기 위한 ALB를 생성하기 위한 파일|
+|real/overprovisioning.yaml|-|오버프로비저닝 파드를 생성하기 위한 파일|
+|real/ui.yaml|-|쇼핑몰 UI 컴포넌트를 커스터마이징 하기 위한 파일|
 
 <br><br>
 

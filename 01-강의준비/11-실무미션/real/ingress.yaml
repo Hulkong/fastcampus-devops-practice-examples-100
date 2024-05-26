@@ -7,6 +7,8 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/load-balancer-name: part01-senario11-ui
+    alb.ingress.kubernetes.io/target-group-attributes: load_balancing.algorithm.type=round_robin
+    # alb.ingress.kubernetes.io/target-group-attributes: load_balancing.algorithm.type=least_outstanding_requests
 spec:
   ingressClassName: alb
   rules:
