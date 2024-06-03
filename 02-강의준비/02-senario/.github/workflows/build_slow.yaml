@@ -1,6 +1,6 @@
 # Here's a breakdown of what it does:
 
-#   It triggers on every push and pull request.
+#   It triggers manually using the workflow_dispatch event.
 #   It runs the jobs on the latest version of Ubuntu.
 #   It uses a matrix strategy to test against a single version of Node.js (14.x).
 #   It checks out your repository using actions/checkout@v2.
@@ -9,28 +9,51 @@
 #   It doesn't build or push a Docker image, which could be part of a more efficient workflow if your application is containerized.
 #   If you want to make this workflow more efficient, you could cache dependencies, run tests and builds in parallel or in a single step, and build and push a Docker image if applicable.
 
-name: Node.js CI (Inefficient Example)
+name: Node.js CI(느린 예시)
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x] # 단일 버전만 사용
 
     steps:
     - uses: actions/checkout@v2
 
-    # 의존성 캐싱을 하지 않음
+    # Node.js 12.x
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '12.x'
     - name: Install Dependencies
       run: npm install
-
-    # 단일 작업에서 모든 테스트 및 빌드를 순차적으로 실행
-    - name: Run Tests
+    - name: Run Test
       run: npm test
+    - name: Build
+      run: npm run build
 
+    # Node.js 14.x
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+    - name: Install Dependencies
+      run: npm install
+    - name: Run Test
+      run: npm test
+    - name: Build
+      run: npm run build
+
+    # Node.js 16.x
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+    - name: Install Dependencies
+      run: npm install
+    - name: Run Test
+      run: npm test
     - name: Build
       run: npm run build
 

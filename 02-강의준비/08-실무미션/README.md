@@ -1,11 +1,12 @@
-# CH03_03. 시나리오 설명 및 실습
+# 도커라이징시 최적화하여 CI 빌드속도를 높여 실질적인 서비스 안정성을 높여본다.
 > **주의사항**
+내용을 입력해주세요.
 
 <br>
 
 ## 챕터명
 
-도커라이징 최적화
+도커라이징시 최적화하여 CI 빌드속도를 높여 실질적인 서비스 안정성을 높여본다.(실무미션)
 
 <br><br>
 
@@ -19,18 +20,13 @@
 
 ## 환경
 
-- Docker
+내용을 입력해주세요.
 
 <br><br>
 
 ## 시나리오
 
-1. Use a minimal base image
-2. Combine RUN commands
-3. Leverage Multi-Stage builds
-4. Remove unnecessary files
-5. Optimize docker build cache
-6. Use .dockerignore
+내용을 입력해주세요.
 
 <br><br>
 
