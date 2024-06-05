@@ -28,8 +28,9 @@ CI 빌드속도 개선
 
 ## 🌐 환경
 
-- Docker Desktop v4.15.0: 로컬 환경에서 컨테이너를 실행하기 위한 도구이며, ack를 실행하기 위해서 필요합니다.
-- ack: 로컬에서 GitHub Actions 워크플로우를 실행하기 위한 도구입니다.
+- Docker Desktop v4.15.0: 로컬 환경에서 컨테이너를 실행하기 위한 도구이며, act를 실행하기 위해서 필요합니다.
+- act: 로컬에서 GitHub Actions 워크플로우를 실행하기 위한 도구입니다.
+- github-act-cache-server: GitHub Actions 캐싱 서버로, 로컬에서 act를 이용하여 캐싱 전략을 사용하기 위한 서버입니다.
 
 <br><br>
 
@@ -41,8 +42,9 @@ CI 빌드속도 개선
 
 이 시나리오에서는 다음과 같은 작업을 수행합니다.
 
-1. 캐싱 전략을 사용하여 종속성 설치 속도 개선
-2. 병렬 빌드를 사용하여 여러 작업 동시 실행
+1. 느린 워크플로우를 실행하여 빌드 속도를 확인합니다.
+2. 병렬 빌드를 사용하여 여러 작업 동시 실행하여 빌드 속도를 개선합니다.
+3. 캐싱 전략을 사용하여 종속성을 설치하고 Job을 병렬로 실행하여 속도를 개선합니다.
 
 <br><br>
 
@@ -54,9 +56,6 @@ act -l
 
 # act -W 명령어로 특정 워크플로우(느린 빌드 예시) 실행
 act -W .github/workflows/build_slow.yaml
-
-# act -W 명령어로 특정 워크플로우(빠른 빌드 예시) 실행
-act -W .github/workflows/build_fast.yaml
 ```
 
 <br><br>
@@ -67,8 +66,11 @@ act -W .github/workflows/build_fast.yaml
 # 1. 느린 빌드 실행
 ./build_test.sh build_slow.yaml
 
-# 2. 빠른 빌드 실행
-./build_test.sh build_fast.yaml
+# 2. Job을 병렬로 실행하여 실행속도 개선
+./build_test.sh build_parallel.yaml
+
+# 3. 캐싱 전략을 사용하여 종속성을 설치하고 Job을 병렬로 실행하여 속도 개선
+./build_test.sh build_parallel_cache.yaml
 ```
 
 <br><br>
@@ -87,7 +89,17 @@ act -W .github/workflows/build_fast.yaml
 
 <br><br>
 
+## 🚨 주의사항
+- build_test.sh 스크립트에 실행권한이 없으면 다음의 명령어를 사용하여 권한을 부여 후, 진행하세요.
+```bash
+chmod +x build_test.sh
+```
+
+<br><br>
+
 ## 📚 참고
 - [Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 - [GitHub Actions documentation](https://docs.github.com/en/actions)
 - [실습 도커 이미지 저장소](https://hub.docker.com/repository/docker/username/repo)
+- [github-act-cache-server](https://github.com/sp-ricard-valverde/github-act-cache-server)
+- [act](https://nektosact.com/introduction.html)

@@ -32,16 +32,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    # 의존성 캐싱
-    - name: Cache node modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
-    # 의존성 설치
     - name: Install Dependencies
       run: npm install
 
@@ -62,7 +52,7 @@ jobs:
     - name: Build Docker image
       run: docker build . --file Dockerfile --tag myapp:${{ github.sha }}
 
-    # Docker 이미지 푸시
+    # Docker 이미지 푸시 단계를 생략함
     # DOCKER_USERNAME과 DOCKER_PASSWORD는 GitHub Secrets에 저장해야 함
     # - name: Push Docker image
     #   run: |
