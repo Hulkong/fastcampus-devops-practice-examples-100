@@ -18,18 +18,21 @@
 
 ## 실습 환경
 
-- Terraform Cli v1.6.3
-- kubectl v1.28.4
-- k9s v0.28.2
-- aws CLI v2.15.17
-- EKS v1.28
-- Docker Desktop 4.15.0
-- Docker Hub
-- GitHub Actions
-- ArgoCD
-- ArgoCD Image Updater
-- ArgoCD Vault Plugin
-- Container Registry(docker hub, AWS ECR)
+|도구명|용도|버전|비고|
+|---|---|---|---|
+|Terraform Cli|Terraform을 실행하기 도구|v1.6.3|-|
+|kubectl|쿠버네티스 클러스터와 통신하기 위한 CLI 도구|v1.28.4|-|
+|k9s|쿠버네티스 클러스터를 터미널에서 쉽게 관리할 수 있게 해주는 도구|v0.28.2|-|
+|aws CLI|AWS 리소스를 관리하기 위한 CLI 도구|v2.15.17|-|
+|EKS|AWS에서 제공하는 쿠버네티스 서비스|v1.28|-|
+|act|GitHub Actions를 로컬에서 실행할 수 있게 해주는 도구|v0.2.56|-|
+|Docker Desktop|Windows와 Mac 운영 체제에서 Docker를 실행하고 관리하기 위한 도구|4.15.0|-|
+|Docker Hub|Docker 이미지를 저장하고 공유하는 클라우드 기반의 레지스트리 서비스|-|-|
+|ECR|AWS에서 제공하는 Docker 컨테이너 이미지 저장소 서비스|-|-|
+|GitHub Actions|GitHub에서 직접 소프트웨어 개발 워크플로우를 자동화할 수 있는 도구|-|-|
+|ArgoCD|쿠버네티스에 대한 선언적인 GitOps 연속 배포 도구|-|-|
+|ArgoCD Image Updater|쿠버네티스 클러스터에서 실행되는 애플리케이션의 컨테이너 이미지를 자동으로 업데이트하는 Argo CD의 확장 도구|-|-|
+|ArgoCD Vault Plugin|Argo CD에서 HashiCorp Vault를 사용하여 비밀을 관리하는 데 도움이 되는 플러그인|-|-|
 
 참고로, Windows에서는 WSL(Windows Subsystem for Linux)을 사용하여 Linux 환경을 구축하고 그 안에서 각 종 툴을 사용하는 것도 좋은 대안이 될 수 있습니다. 이 방법을 통하면 Linux에서와 동일한 방식으로 툴을 사용할 수 있습니다.
 > [wsl 공식 설치 문서](https://learn.microsoft.com/ko-kr/windows/wsl/install) 
@@ -42,6 +45,9 @@
 <br>
 
 ### 1. Terraform cli 설치
+
+**Terraform**는 인프라스트럭처를 코드로 관리하기 위한 도구입니다.
+
 > 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
 https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 
@@ -54,24 +60,36 @@ brew install hashicorp/tap/terraform@1.6.3
 <br>
 
 ### 2. kubectl 설치
+
+**kubectl**은 쿠버네티스 클러스터와 통신하기 위한 CLI 도구입니다.
+
 > 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
 https://kubernetes.io/ko/docs/tasks/tools/
 
 <br>
 
 ### 3. k9s 설치
+
+**k9s**는 쿠버네티스 클러스터를 터미널에서 쉽게 관리할 수 있게 해주는 도구입니다.
+
 > 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
 https://kubernetes.io/ko/docs/tasks/tools/
 
 <br>
 
 ### 4. aws-cli 설치
+
+**aws-cli**는 AWS 리소스를 관리하기 위한 CLI 도구입니다.
+
 > 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
 https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html
 
 <br>
 
 ### 5. EKS 설치
+
+**EKS**는 AWS에서 제공하는 쿠버네티스 서비스입니다.
+
 > EKS는 02-강의준비/main.tf 파일을 기반으로 테라폼으로 프로비저닝 할 수 있습니다.
 
 ```terraform
@@ -93,6 +111,15 @@ terraform -chdir=02-강의준비 apply
 ```
 
 <br>
+
+### 6. act 설치
+
+**act**는 GitHub Actions를 로컬에서 실행할 수 있게 해주는 도구입니다.
+
+> 아래의 링크에 각 OS 환경에 맞는 설치 방법이 나와 있습니다. 
+https://nektosact.com/installation/index.html
+
+<br><br>
 
 ## Tips
 

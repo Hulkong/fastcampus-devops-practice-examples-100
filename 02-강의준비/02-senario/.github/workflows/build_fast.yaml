@@ -64,7 +64,7 @@ jobs:
 
     # Docker 이미지 푸시
     # DOCKER_USERNAME과 DOCKER_PASSWORD는 GitHub Secrets에 저장해야 함
-    - name: Push Docker image
-      run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-        docker push myapp:${{ github.sha }}
+    # - name: Push Docker image
+    #   run: |
+    #     echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    #     docker push myapp:${{ github.sha }}

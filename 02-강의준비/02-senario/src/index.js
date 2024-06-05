@@ -12,8 +12,4 @@ app.get('/add', (req, res) => {
   res.send(`Result: ${add(parseInt(a), parseInt(b))}`);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
 module.exports = app; // 테스트를 위해 export

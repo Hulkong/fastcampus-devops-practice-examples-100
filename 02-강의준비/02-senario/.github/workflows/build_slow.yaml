@@ -30,8 +30,9 @@ jobs:
       run: npm install
     - name: Run Test
       run: npm test
-    - name: Build
-      run: npm run build
+    # Docker 이미지 빌드
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag myapp:${{ github.sha }}-12
 
     # Node.js 14.x
     - name: Use Node.js 14.x
@@ -42,8 +43,9 @@ jobs:
       run: npm install
     - name: Run Test
       run: npm test
-    - name: Build
-      run: npm run build
+    # Docker 이미지 빌드
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag myapp:${{ github.sha }}-14
 
     # Node.js 16.x
     - name: Use Node.js 16.x
@@ -54,7 +56,8 @@ jobs:
       run: npm install
     - name: Run Test
       run: npm test
-    - name: Build
-      run: npm run build
+    # Docker 이미지 빌드
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag myapp:${{ github.sha }}-16
 
     # Docker 이미지 빌드 및 푸시 단계를 생략함 (비효율적 예시에서는 포함되지 않음)

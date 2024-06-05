@@ -20,21 +20,3 @@
 6. ArgoCD를 이용하여 Orphaned Resources를 관리해봅니다.
 
 ![인프라 환경](../../images/02-01-image.png)
-
-<br><br>
-
-## 실습 환경
-
-- Terraform Cli v1.6.3
-- kubectl v1.28.4
-- k9s v0.28.2
-- aws CLI v2.15.17
-- EKS v1.28
-- kustomize v5.3.0
-- helm v3.13.2
-- Docker
-- GitHub Actions
-- ArgoCD
-- ArgoCD Image Updater
-- ArgoCD Vault Plugin
-- Container Registry(docker hub, AWS ECR)
