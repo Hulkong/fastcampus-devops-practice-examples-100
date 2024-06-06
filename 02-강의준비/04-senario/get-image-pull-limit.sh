@@ -6,5 +6,5 @@ do
   lima nerdctl pull $1
   
   lima nerdctl rmi $1
-  sleep 1
+  sleep 3
 done

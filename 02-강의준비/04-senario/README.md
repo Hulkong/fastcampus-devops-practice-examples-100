@@ -22,11 +22,11 @@
 In order to evaluate the solutions, let’s try to understand how the rate limit works. The current limits as for December, 13th 2023 are the following:
 > - 100 pull requests per 6 hours for anonymous users on a free plan. Enforced based on your IP Address.
 > - 200 pull requests per 6 hours for authenticated users on a free plan.
-> - Up to 5000 pulls per day for paying customers.
+> - Up to 5,000 pulls per day for paying customers.
 
 anonmyous로 사용하면 공인 IP를 기준으로 rate limit 수를 카운팅하고, login을 하면 계정 사용자 기준으로 카운팅합니다.
 
-다시 말하면, 익명 사용자는 IP 기반으로 6시간에 100번, 로그인 사용자는 계정 기반으로 6시간에 200번, 지불 계정 사용자는 1일에 5000번까지 가능하다는 것입니다.
+다시 말하면, 익명 사용자는 IP 기반으로 6시간에 100번, 로그인 사용자는 계정 기반으로 6시간에 200번, 지불 계정 사용자는 1일에 5,000번까지 가능하다는 것입니다.
 
 - 익명 유저(`docker login 안함`)인 경우 IP 기반으로 필터링 되며 6시간동안 100번 요청 가능
 - 로그인 유저(`docker login 함`)인 경우 계정 기반으로 필터링 되며 6시간동안 200번 요청 가능
@@ -40,7 +40,7 @@ anonmyous로 사용하면 공인 IP를 기준으로 rate limit 수를 카운팅�
 
 - 익명 유저인 경우 node가 많고 각 노드가 public ip를 갖는 경우, 노드 당 100개의 요청을 보낼 수 있어 오히려 로그인하는 것보다 나을 수 있습니다.
 - 로그인 유저일 경우, 모든 노드가 로그인 계정을 공유하여, 200개의 요청 수 제한이 존재합니다. 그러므로 node가 많으면 더 빠르게 rate limit에 도달할 수 있습니다.
-- 지불 계정 유저는 요청 수 제한이 증가하지만 그래도 24시간 내에 5000개의 요청 수 제한이 있습니다.
+- 지불 계정 유저는 요청 수 제한이 증가하지만 그래도 24시간 내에 5,000개의 요청 수 제한이 있습니다.
 
 <br>
 
@@ -66,7 +66,7 @@ Content-Type: application/json
 
 ### 해결 방법은 다음과 같습니다.
 
-1. Docker Pro 및 Docker Team 계정을 구독하여, Docker Hub에서 24 시간 동안 컨테이너 이미지를 50,000개 다운로드할 수 있습니다. 하지만, 이 방법은 비용이 발생합니다.
+1. Docker Pro 및 Docker Team 계정을 구독하여, Docker Hub에서 24 시간 동안 컨테이너 이미지를 5,000개 다운로드할 수 있습니다. 하지만, 이 방법은 비용이 발생합니다.
 2. mirror registry를 구축합니다. 하지만, mirror registry도 rate limit가 걸릴 수 있습니다.
 3. Docker Hub 이미지를 프록시하여 Docker Hub에서 이미지를 다운로드하는 대신 프록시 캐시에서 이미지를 다운로드합니다. 여전히 rate limit에 영향을 받을 수 있습니다.
 4. Docker Hub에서 이미지를 다운로드하는 대신, Docker Hub 이미지를 복제하여 자체 레지스트리에 저장합니다. 하지만, 이 방법은 이미지를 복제하고 유지 관리하는 추가 작업이 필요합니다.
