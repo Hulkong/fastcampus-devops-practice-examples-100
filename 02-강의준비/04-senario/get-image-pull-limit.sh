@@ -1,15 +1,10 @@
 #!/bin/bash
 
-for i in {1..41}
+for i in {1..101}
 do
-  echo "Creating pod $i"
-  # kubectl apply -f sample-pod.yaml
-  # docker pull hulkong/test-limit:nginx
-  lima nerdctl pull hulkong/test-limit:nginx
-  sleep 20
-  echo "Deleting pod $i"
-  # kubectl delete pod pull-limit-test
-  # docker rmi hulkong/test-limit:nginx
-  lima nerdctl rmi hulkong/test-limit:nginx
-  sleep 5
+  echo -e "\n\nMake it reach the docker pull limit $i"
+  lima nerdctl pull $1
+  
+  lima nerdctl rmi $1
+  sleep 1
 done
