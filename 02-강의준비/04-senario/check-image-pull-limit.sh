@@ -5,6 +5,8 @@ get_token() {
   TOKEN=$(curl "https://auth.docker.io/token?service=registry.docker.io&scope=repository:hulkong/test-limit:pull" | jq -r .token)
 }
 
+get_token
+
 # watch 없이 무한 루프를 사용합니다.
 while true; do
   # curl 명령을 실행하고 HTTP 상태 코드를 가져옵니다.
