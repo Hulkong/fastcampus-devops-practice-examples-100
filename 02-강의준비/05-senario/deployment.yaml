@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: guestbook-ui
+  name: sample
 spec:
   replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: guestbook-ui
+      app: sample
   template:
     metadata:
       labels:
-        app: guestbook-ui
+        app: sample
     spec:
       containers:
         - image: hulkong/fastcampus-devops-practice-examples-100:1.0
-          name: guestbook-ui
+          name: sample
           ports:
             - containerPort: 80
