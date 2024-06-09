@@ -17,4 +17,4 @@ spec:
         - image: hulkong/fastcampus-devops-practice-examples-100:part02-05-senario-v1.0.0
           name: sample
           ports:
-            - containerPort: 80
+            - containerPort: 5000
