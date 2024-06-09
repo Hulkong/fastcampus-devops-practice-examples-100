@@ -54,7 +54,7 @@ provider "kubectl" {
 
 locals {
   name   = "part02"
-  region = "us-west-2"
+  region = "us-east-2"
 
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
@@ -164,6 +164,10 @@ module "eks" {
       ]
     },
   ]
+
+  create_kms_key              = false
+  cluster_encryption_config   = {}
+  create_cloudwatch_log_group = false
 
   tags = merge(local.tags, {
     # NOTE - if creating multiple security groups with this module, only tag the
