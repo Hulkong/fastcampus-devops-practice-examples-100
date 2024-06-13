@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample
+  name: sample-new
 spec:
   replicas: 1
   revisionHistoryLimit: 3
