@@ -172,6 +172,7 @@ terraform -chdir=../ destroy --auto-approve
 <br><br>
 
 ## 참고
+
 - [ArgoCD](https://argo-cd.readthedocs.io/en/stable/)
 - [ArgoCD Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/)
 - [fastcampus-devops-practice-examples-100](https://hub.docker.com/repository/docker/hulkong/fastcampus-devops-practice-examples-100)
