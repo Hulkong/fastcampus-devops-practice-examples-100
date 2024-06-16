@@ -72,6 +72,7 @@
 
 ## 파일 설명
 |파일명|설명|
+|---|---|
 |deployment.yaml|flask 웹 서버를 배포하는 Deployment 리소스|
 
 <br><br>
