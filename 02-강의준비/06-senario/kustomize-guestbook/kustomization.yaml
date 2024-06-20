@@ -4,5 +4,7 @@ resources:
   - guestbook-ui-deployment.yaml
   - guestbook-ui-svc.yaml
   - guestbook-ui-secret.yaml
+  - guestbook-cluster-secret-store.yaml
+  - guestbook-external-secret.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

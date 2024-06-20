@@ -146,7 +146,7 @@ module "eks" {
     kube-proxy         = {}
     vpc-cni            = {}
     aws-ebs-csi-driver = {}
-    # eks-pod-identity-agent = {}
+    eks-pod-identity-agent = {}
   }
 
   iam_role_name            = join("-", [local.name, "eks", "nodegroup"])
@@ -197,6 +197,7 @@ module "eks_blueprints_addons" {
   enable_aws_load_balancer_controller = true
   enable_metrics_server               = true
   enable_external_dns                 = false
+  enable_external_secrets             = true
 
   # external_dns_route53_zone_arns = ["arn:aws:route53:::hostedzone/본인의 HostedZone ID"]
 
@@ -318,4 +319,59 @@ YAML
     module.eks_blueprints_addons.karpenter,
     kubectl_manifest.karpenter_default_node_pool,
   ]
+}
+
+resource "aws_eks_pod_identity_association" "argocd" {
+  cluster_name    = module.eks.cluster_name
+  namespace       = "argocd"
+  service_account = "argo-cd-argocd-repo-server"
+  role_arn        = aws_iam_role.argocd.arn
+}
+
+data "aws_iam_policy_document" "pod_identity_assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["pods.eks.amazonaws.com"]
+    }
+
+    actions = [
+      "sts:AssumeRole",
+      "sts:TagSession"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "argocd_role_policy" {
+  statement {
+    actions   = ["secretsmanager:GetSecretValue"]
+    effect    = "Allow"
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role" "argocd" {
+  name               = "${local.name}-eks-pod-identity-argocd"
+  assume_role_policy = data.aws_iam_policy_document.pod_identity_assume_role.json
+  inline_policy {
+    name   = "secretsmanagerGetSecretValue"
+    policy = data.aws_iam_policy_document.argocd_role_policy.json
+  }
+}
+
+resource "aws_secretsmanager_secret" "test" {
+  name                    = "${local.name}/senario06"
+  recovery_window_in_days = 0 # Set to zero for this example to force delete during Terraform destroy
+}
+
+resource "aws_secretsmanager_secret_version" "test" {
+  secret_id = aws_secretsmanager_secret.test.id
+
+  # TODO: Figure out a way to generate mapping structure that presents this
+  #       key/value pair structure in a more readable way. Maybe use template files?
+  secret_string = jsonencode({
+    "test" = "hi"
+  })
 }
