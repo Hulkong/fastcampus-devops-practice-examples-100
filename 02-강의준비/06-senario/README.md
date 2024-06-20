@@ -148,12 +148,13 @@ kustomize build kustomize-guestbook | argocd-vault-plugin generate --verbose-sen
 # 4. ArgoCD CLI로 애플리케이션 배포
 argocd app list
 argocd app create helm-guestbook --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/helm-guestbook' --dest-namespace default --dest-server https://kubernetes.default.svc
-
-argocd app create kustomize-guestbook --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/kustomize-guestbook' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create kustomize-guestbook-01 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/kustomize-guestbook-01' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create kustomize-guestbook-02 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/kustomize-guestbook-02' --dest-namespace default --dest-server https://kubernetes.default.svc
 
 # 8. 리소스 정리 
 argocd app delete argocd/helm-guestbook
-argocd app delete argocd/kustomize-guestbook
+argocd app delete argocd/kustomize-guestbook-01
+argocd app delete argocd/kustomize-guestbook-02
 kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 terraform -chdir=../ destroy --auto-approve
 ```
