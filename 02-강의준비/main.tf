@@ -324,7 +324,7 @@ YAML
 resource "aws_eks_pod_identity_association" "argocd" {
   cluster_name    = module.eks.cluster_name
   namespace       = "argocd"
-  service_account = "argo-cd-argocd-repo-server"
+  service_account = "argocd-repo-server"
   role_arn        = aws_iam_role.argocd.arn
 }
 
