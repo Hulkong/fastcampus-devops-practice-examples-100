@@ -1,4 +1,4 @@
-namePrefix: kustomize-
+namePrefix: kustomize02-
 
 resources:
   - guestbook-ui-deployment.yaml
