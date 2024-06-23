@@ -153,16 +153,15 @@ helm delete helm-guestbook
 
 # 3. 로컬에서 ArgoCD Vault Plugin CLI로 민감정보를 동적으로 생성 테스트
 aws configure list
-export AVP_TYPE=awssecretsmanager
-export AWS_REGION=us-east-2
-helm template helm-guestbook helm-guestbook --values helm-guestbook/values.yaml | argocd-vault-plugin generate --verbose-sensitive-output -
-kustomize build kustomize-guestbook | argocd-vault-plugin generate --verbose-sensitive-output -
+export AVP_TYPE=awssecretsmanager && export AWS_REGION=us-east-2
+helm template helm-guestbook 01-helm-guestbook-with-avp --values 01-helm-guestbook-with-avp/values.yaml | argocd-vault-plugin generate --verbose-sensitive-output -
+kustomize build 01-kustomize-guestbook-with-avp | argocd-vault-plugin generate --verbose-sensitive-output -
 
 # 4. ArgoCD CLI로 애플리케이션 배포
 argocd app list
 argocd app create helm-guestbook --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/01-helm-guestbook-with-avp' --dest-namespace default --dest-server https://kubernetes.default.svc
-argocd app create kustomize-guestbook-01 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '01-kustomize-guestbook-with-avp' --dest-namespace default --dest-server https://kubernetes.default.svc
-argocd app create kustomize-guestbook-02 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-kustomize-guestbook-with-eso' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create kustomize-guestbook-01 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/01-kustomize-guestbook-with-avp' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create kustomize-guestbook-02 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/02-kustomize-guestbook-with-eso' --dest-namespace default --dest-server https://kubernetes.default.svc
 
 # 5. 리소스 정리 
 argocd app delete argocd/helm-guestbook
