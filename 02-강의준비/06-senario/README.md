@@ -89,10 +89,11 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 ## 파일 설명
 |파일명|설명|
 |---|---|
+|00-not-secure-helm-guestbook|민감정보가 노출되는 예제 디렉토리|
+|01-helm-guestbook-with-avp|ArgoCD Vault Plugin을 이용한 helm 예제 디렉토리|
+|01-kustomize-guestbook-with-avp|ArgoCD Vault Plugin을 이용한 kustomize 예제 디렉토리|
+|02-kustomize-guestbook-with-eso|External Secret을 이용한 kustomize 예제 디렉토리|
 |cmp-sidecar|sidecar 패턴을 적용하여 ArgoCD Vault Plugin을 설치하는 디렉토리|
-|helm-guestbook|ArgoCD Vault Plugin을 이용한 helm 예제 디렉토리|
-|kustomize-guestbook-01|ArgoCD Vault Plugin을 이용한 kustomize 예제 디렉토리|
-|kustomize-guestbook-02|External Secret을 이용한 kustomize 예제 디렉토리|
 
 <br><br>
 
