@@ -50,7 +50,7 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 |Supported Secret Providers|**Total: 14**<br>- HashiCorp Vault<br>- AWS Secrets Manager<br>- Google Cloud Secrets Manager<br>- Azure Key Vault<br>- ......|**Total: 8**<br>-  HashiCorp Vault<br>- AWS Secrets Manager<br>- Google Cloud Secrets Manager<br>- Azure Key Vault<br>- ......|
 |Requires Argo CD?|No|Yes|
 |Requires Custom Resources and controllers?|Yes|No|
-|Auto sync changes to external API secret?|Yes|Yes|
+|Auto sync changes to external API secret?|Yes|No|
 |Connect to multiple secret managers simultaneously?|Yes|No|
 
 <br>
@@ -68,6 +68,7 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 - Terraform CLI v1.6.6
 - kubectl v1.28.4
 - helm v3.13.2
+- kustomize v5.3.0
 - ArgoCD v2.11.3(👉 https://argo-cd.readthedocs.io/en/stable/getting_started/)
 - ArgoCD CLI v2.8.6(👉 https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 - ArgoCD Vault Plugin(👉 https://argocd-vault-plugin.readthedocs.io/en/stable/)
@@ -88,7 +89,10 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 ## 파일 설명
 |파일명|설명|
 |---|---|
-|내용을 입력해주세요.|내용을 입력해주세요.|
+|cmp-sidecar|sidecar 패턴을 적용하여 ArgoCD Vault Plugin을 설치하는 디렉토리|
+|helm-guestbook|ArgoCD Vault Plugin을 이용한 helm 예제 디렉토리|
+|kustomize-guestbook-01|ArgoCD Vault Plugin을 이용한 kustomize 예제 디렉토리|
+|kustomize-guestbook-02|External Secret을 이용한 kustomize 예제 디렉토리|
 
 <br><br>
 
@@ -119,7 +123,11 @@ argocd app delete {APP_NAME}
 # port-forward
 kubectl port-forward {RESOURCE}/{RESOURCE_NAME} {LOCAL_PORT}:{REMOTE_PORT}
 
+# helm 차트를 ArgoCD Vault Plugin을 이용하여 민감정보를 동적으로 생성
 helm template {CHART_NAME} {CHART_PATH} --values {VALUES_FILE} | argocd-vault-plugin generate - | kubectl apply -f -
+
+# kustomize를 ArgoCD Vault Plugin을 이용하여 민감정보를 동적으로 생성
+kustomize build {WORKING DIRECTOR} | argocd-vault-plugin generate --verbose-sensitive-output - | kubectl apply -f -
 ```
 
 <br><br>
@@ -138,7 +146,12 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 argocd admin initial-password -n argocd
 argocd login localhost:8080
 
-# 3. 로컬에서 ArgoCD Vault Plugin으로 민감정보를 동적으로 생성
+# 2. 민감정보가 노출되는 사례 확인
+helm template helm-guestbook 00-not-secure-helm-guestbook --values 00-not-secure-helm-guestbook/values.yaml
+helm install helm-guestbook ./00-not-secure-helm-guestbook --values 00-not-secure-helm-guestbook/values.yaml
+helm delete helm-guestbook
+
+# 3. 로컬에서 ArgoCD Vault Plugin CLI로 민감정보를 동적으로 생성 테스트
 aws configure list
 export AVP_TYPE=awssecretsmanager
 export AWS_REGION=us-east-2
@@ -147,11 +160,11 @@ kustomize build kustomize-guestbook | argocd-vault-plugin generate --verbose-sen
 
 # 4. ArgoCD CLI로 애플리케이션 배포
 argocd app list
-argocd app create helm-guestbook --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/helm-guestbook' --dest-namespace default --dest-server https://kubernetes.default.svc
-argocd app create kustomize-guestbook-01 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/kustomize-guestbook-01' --dest-namespace default --dest-server https://kubernetes.default.svc
-argocd app create kustomize-guestbook-02 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/kustomize-guestbook-02' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create helm-guestbook --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-강의준비/06-senario/01-helm-guestbook-with-avp' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create kustomize-guestbook-01 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '01-kustomize-guestbook-with-avp' --dest-namespace default --dest-server https://kubernetes.default.svc
+argocd app create kustomize-guestbook-02 --repo https://github.com/Hulkong/fastcampus-devops-practice-examples-100.git --path '02-kustomize-guestbook-with-eso' --dest-namespace default --dest-server https://kubernetes.default.svc
 
-# 8. 리소스 정리 
+# 5. 리소스 정리 
 argocd app delete argocd/helm-guestbook
 argocd app delete argocd/kustomize-guestbook-01
 argocd app delete argocd/kustomize-guestbook-02
