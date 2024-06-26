@@ -65,6 +65,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: '02-강의준비/08-실무미션'
 
     # Docker 이미지 빌드
     - name: Build Docker image
