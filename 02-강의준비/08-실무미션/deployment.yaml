@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: sample
+  template:
+    metadata:
+      labels:
+        app: sample
+    spec:
+      containers:
+        - image: hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-v1.0.0
+          name: sample
+          ports:
+            - containerPort: 5000
