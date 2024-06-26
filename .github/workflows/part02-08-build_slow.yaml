@@ -34,8 +34,10 @@ jobs:
       with:
         node-version: '12.x'
     - name: Install Dependencies
+      working-directory: '02-강의준비/08-실무미션'
       run: npm install
     - name: Run Test
+      working-directory: '02-강의준비/08-실무미션'
       run: npm test
 
     # Node.js 14.x
@@ -44,8 +46,10 @@ jobs:
       with:
         node-version: '14.x'
     - name: Install Dependencies
+      working-directory: '02-강의준비/08-실무미션'
       run: npm install
     - name: Run Test
+      working-directory: '02-강의준비/08-실무미션'
       run: npm test
 
     # Node.js 16.x
@@ -54,12 +58,15 @@ jobs:
       with:
         node-version: '16.x'
     - name: Install Dependencies
+      working-directory: '02-강의준비/08-실무미션'
       run: npm install
     - name: Run Test
+      working-directory: '02-강의준비/08-실무미션'
       run: npm test
 
     # Docker 이미지 빌드
     - name: Build Docker image
+      working-directory: '02-강의준비/08-실무미션'
       run: docker build . --file Dockerfile --build-arg VERSION=${{ github.event.inputs.imageVersion }} --tag hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-${{ github.event.inputs.imageVersion }}
 
     # Docker login 후, Docker Hub에 Image를 push
@@ -73,4 +80,5 @@ jobs:
     # Docker 이미지 푸시 단계를 생략함
     # DOCKER_USERNAME과 DOCKER_PASSWORD는 GitHub Secrets에 저장해야 함
     - name: Push Docker image
+      working-directory: '02-강의준비/08-실무미션'
       run: docker push hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-${{ github.event.inputs.imageVersion }}
