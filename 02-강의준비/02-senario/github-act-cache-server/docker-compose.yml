@@ -1,0 +1,17 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      args:
+        # - AUTH_KEY=${ACT_CACHE_AUTH_KEY:?Missing env var ACT_CACHE_AUTH_KEY}
+        - AUTH_KEY=foo
+    ports:
+      - '8080:8080'
+    volumes:
+      - github-act-cache-server-cache:/usr/src/app/.caches
+      - github-act-cache-server-db:/usr/local/etc/
+      #- ./src:/usr/src/app/src # development
+volumes:
+  github-act-cache-server-cache:
+  github-act-cache-server-db:
