@@ -19,6 +19,10 @@ on:
         required: true
         default: 'latest'
 
+defaults:
+  run:
+    working-directory: '02-강의준비/08-실무미션'
+        
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -38,8 +42,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: '02-강의준비/08-실무미션'
-          file: '02-강의준비/08-실무미션/Dockerfile'
+          # context: '02-강의준비/08-실무미션'
+          # file: '02-강의준비/08-실무미션/Dockerfile'
           platforms: linux/amd64,linux/arm64
           push: true
           tags: hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-${{ github.event.inputs.imageVersion }}
