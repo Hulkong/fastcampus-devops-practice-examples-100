@@ -38,7 +38,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: '02-강의준비/08-실무미션'
           file: '02-강의준비/08-실무미션/Dockerfile'
           platforms: linux/amd64,linux/arm64
           push: true
