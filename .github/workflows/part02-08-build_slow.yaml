@@ -25,6 +25,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: '02-강의준비/08-실무미션'
 
     # Node.js 12.x
     - name: Use Node.js 12.x
@@ -58,7 +60,7 @@ jobs:
 
     # Docker 이미지 빌드
     - name: Build Docker image
-      run: docker build "02-강의준비/08-실무미션" --file "02-강의준비/08-실무미션/Dockerfile" --build-arg VERSION=${{ github.event.inputs.imageVersion }} --tag hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-${{ github.event.inputs.imageVersion }}
+      run: docker build . --file Dockerfile --build-arg VERSION=${{ github.event.inputs.imageVersion }} --tag hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-${{ github.event.inputs.imageVersion }}
 
     # Docker login 후, Docker Hub에 Image를 push
     - name: Login to Docker Hub
