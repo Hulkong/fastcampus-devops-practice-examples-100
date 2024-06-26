@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       
@@ -48,5 +48,7 @@ jobs:
           context: '02-강의준비/08-실무미션'
           file: '02-강의준비/08-실무미션/Dockerfile'
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            VERSION=${{ github.event.inputs.imageVersion }}
           push: true
           tags: hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-${{ github.event.inputs.imageVersion }}
