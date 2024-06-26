@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
         - image: hulkong/fastcampus-devops-practice-examples-100:part02-08-senario-v1.0.0
+          imagePullPolicy: Always
           name: sample
           ports:
             - containerPort: 5000
