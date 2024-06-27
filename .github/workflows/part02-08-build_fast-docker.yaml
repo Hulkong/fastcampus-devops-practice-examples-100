@@ -54,7 +54,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: raw,value=part02-08-senario-${{ github.event.inputs.imageVersion }}
-          flavor: raw
+          flavor: |
+            latest=false
       
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
