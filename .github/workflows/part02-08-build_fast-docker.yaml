@@ -1,4 +1,4 @@
-name: CI(빠른 예시 테스트)
+name: CI(빠른 예시)
 
 on:
   workflow_dispatch:
