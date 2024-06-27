@@ -156,7 +156,7 @@ docker push hulkong/fastcampus-devops-practice-examples-100:part02-05-senario-v2
 kubectl annotate app test -n argocd \
     argocd-image-updater.argoproj.io/image-list=my-image=hulkong/fastcampus-devops-practice-examples-100 \
     argocd-image-updater.argoproj.io/my-image.allow-tags='regexp:^part02-05-senario-v\d+\.\d+\.\d+$' \
-    argocd-image-updater.argoproj.io/my-image.update-strategy=latest --overwrite
+    argocd-image-updater.argoproj.io/my-image.update-strategy=name --overwrite
 
 # 7. 이미지 태그 및 푸시
 docker tag hulkong/fastcampus-devops-practice-examples-100:part02-05-senario-v2.0.0 hulkong/fastcampus-devops-practice-examples-100:part02-05-senario-v2.0.1
