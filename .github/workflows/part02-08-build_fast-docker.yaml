@@ -75,7 +75,7 @@ jobs:
           file: '02-강의준비/08-실무미션/Dockerfile'
           platforms: ${{ matrix.platform }}
           labels: part02-08-senario-${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=false,name-canonical=true,push=true
           tags: ${{ steps.meta.outputs.tags }}
       
       - name: Export digest
