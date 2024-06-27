@@ -1,5 +1,7 @@
 FROM ubuntu:latest
 
+WORKDIR /app
+
 COPY . .
 
 # install nodejs
@@ -11,8 +13,6 @@ RUN apt-get -qq install nodejs --yes
 
 ARG VERSION
 ENV VERSION ${VERSION}
-
-WORKDIR /app
 
 COPY package*.json ./
 
