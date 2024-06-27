@@ -72,7 +72,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: '02-강의준비/08-실무미션'
-          file: '02-강의준비/08-실무미션/Dockerfile.optimize'
+          file: '02-강의준비/08-실무미션/Dockerfile.optimize2'
           platforms: ${{ matrix.platform }}
           labels: part02-08-senario-${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
@@ -80,6 +80,7 @@ jobs:
             VERSION=${{ github.event.inputs.imageVersion }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          # provenance: false
       
       - name: Export digest
         run: |
