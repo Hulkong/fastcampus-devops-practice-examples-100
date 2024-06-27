@@ -19,7 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Test Code
       - name: Use Node.js 18.x
         uses: actions/setup-node@v2
         with:
@@ -32,7 +31,7 @@ jobs:
         run: npm test
 
 
-      # Build and Push Docker Image
+      # 도커 빌드 및 푸시를 진행합니다. 다만, 플랫폼을 시퀀셜하게 빌드하므로 빌드속도가 느립니다.
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       

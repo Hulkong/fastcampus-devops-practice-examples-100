@@ -17,6 +17,7 @@ jobs:
       run:
         working-directory: '02-강의준비/08-실무미션'
     runs-on: ubuntu-latest
+    # 빌드속도 개선 1: 플랫폼을 병렬로 빌드하므로 빌드속도가 빨라집니다.
     strategy:
       fail-fast: false
       matrix:
@@ -27,7 +28,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Test Code
       - name: Use Node.js 18.x
         uses: actions/setup-node@v2
         with:
@@ -40,7 +40,7 @@ jobs:
         run: npm test
 
 
-      # Build and Push Docker Image
+      # 도커 빌드 및 푸시를 진행합니다. 병렬적으로 빌드하므로 빌드속도가 빠릅니다.
       - name: Prepare
         run: |
           platform=${{ matrix.platform }}
@@ -78,10 +78,9 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
             VERSION=${{ github.event.inputs.imageVersion }}
+          # 빌드속도 개선 2: 레이어 캐시를 사용하여 빌드속도를 높입니다. 두 번째 빌드시 레이어 캐시를 사용하여 빌드 속도가 빨라집니다.
           cache-from: type=gha,scope=build-${{ matrix.platform }}
-          # cache-to: type=gha,scope=build-${{ matrix.platform }}
           cache-to: type=gha,mode=max,scope=build-${{ matrix.platform }}
-          # provenance: false
       
       - name: Export digest
         run: |
@@ -97,6 +96,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  # 상위 job에서 빌드된 이미지를 병합하여 manifest list를 생성하고, 이미지를 최종적으로 업로드합니다.
   merge:
     runs-on: ubuntu-latest
     needs:
