@@ -11,12 +11,11 @@ on:
 env:
   REGISTRY_IMAGE: hulkong/fastcampus-devops-practice-examples-100
 
-defaults:
-  run:
-    working-directory: '02-강의준비/08-실무미션'
-
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: '02-강의준비/08-실무미션'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
