@@ -71,6 +71,8 @@ jobs:
         id: build
         uses: docker/build-push-action@v6
         with:
+          context: '02-강의준비/08-실무미션'
+          file: '02-강의준비/08-실무미션/Dockerfile'
           platforms: ${{ matrix.platform }}
           tags: ${{ github.event.inputs.imageVersion }}
           labels: part02-08-senario-${{ steps.meta.outputs.labels }}
