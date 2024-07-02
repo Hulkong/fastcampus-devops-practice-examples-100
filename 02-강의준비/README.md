@@ -12,7 +12,7 @@
 |ArgoCD Image Updater를 사용하여 완전한 pull 방식을 지향|CH18_03. 시나리오 설명 및 실습|05-senario|
 |secret값 변경시, ArgoCD에서 동기화 하는 방법|CH19_03. 시나리오 설명 및 실습|06-senario|
 |argocd에서 orphaned resource를 어떻게 모니터링 할까?|CH20_02. 시나리오 설명 및 실습|07-senario|
-|도커라이징시 최적화하여 CI 빌드속도를 높여 실질적인 서비스 안정성을 높여본다.(실무미션)|CH21_01. 도커라이징시 최적화하여 CI 빌드속도를 높여 실질적인 서비스 안정성을 높여본다.|08-senario|
+|도커라이징시 최적화하여 CI 빌드속도를 높여 실질적인 서비스 안정성을 높여본다.(실무미션)|CH21_01. 도커라이징시 최적화하여 CI 빌드속도를 높여 실질적인 서비스 안정성을 높여본다.|08-실무미션|
 
 <br><br>
 
@@ -106,6 +106,7 @@ module "eks" {
 ```bash
 # terraform으로 EKS 프로비저닝
 cd fastcampus-devops-practice-examples-100
+terraform -chdir=02-강의준비 init
 terraform -chdir=02-강의준비 plan
 terraform -chdir=02-강의준비 apply
 ```

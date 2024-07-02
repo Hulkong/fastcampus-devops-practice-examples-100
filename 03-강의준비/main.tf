@@ -53,7 +53,7 @@ provider "kubectl" {
 }
 
 locals {
-  name   = "part02"
+  name   = "part03"
   region = "us-west-2"
 
   vpc_cidr = "10.0.0.0/16"
@@ -237,7 +237,7 @@ data "aws_iam_policy_document" "ebs_policy" {
 }
 
 resource "aws_iam_policy" "ebs_policy" {
-  name        = "part02-ebs-permission"
+  name        = "part03-ebs-permission"
   description = "A test putObejct policy"
   policy      = data.aws_iam_policy_document.ebs_policy.json
 }

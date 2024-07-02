@@ -105,6 +105,7 @@ module "eks" {
 ```bash
 # terraform으로 EKS 프로비저닝
 cd fastcampus-devops-practice-examples-100
+terraform -chdir=01-강의준비 init
 terraform -chdir=01-강의준비 plan
 terraform -chdir=01-강의준비 apply
 ```

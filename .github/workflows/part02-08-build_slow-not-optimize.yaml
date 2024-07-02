@@ -1,4 +1,4 @@
-name: 느린 예시 CI(도커라이징이 최적화되지 않음)
+name: part02. 느린 예시 CI(도커라이징이 최적화되지 않음)
 
 on:
   workflow_dispatch:

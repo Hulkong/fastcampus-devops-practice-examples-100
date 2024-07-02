@@ -1,4 +1,4 @@
-name: 빠른 예시 CI
+name: part02. 빠른 예시 CI
 
 on:
   workflow_dispatch:
