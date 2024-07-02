@@ -16,12 +16,12 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br>
 
-![manual_upgrade](../../images/08-senario01.png)
+![manual_upgrade](../../images/01-08-01.png)
 **[그림1. cordon과 drain을 이용하여 수동으로 EKS 노드 버전을 업그레이드]**
 
 <br>
 
-![manual_upgrade](../../images/08-senario03.png)
+![manual_upgrade](../../images/01-08-03.png)
 **[그림2. CA와 karpenter를 사용하여 자동으로 EKS 노드 버전을 업그레이드]**
 
 <br><br>

@@ -20,22 +20,22 @@ kustomize, helm, kustomize + helm은 언제 사용해야 하는가?
 
 <br>
 
-![kustomize](../../images/06-senario01.png)
+![kustomize](../../images/01-06-01.png)
 **[그림1. 서비스 규모가 작은 기업에서 데브옵스가 GitOps 레포지토리를 전적으로 관리할 때, kustomize를 사용]**
 
 <br>
 
-![helm_01](../../images/06-senario02.png)
+![helm_01](../../images/01-06-02.png)
 **[그림2. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용할 필요가 있을 때, helm를 사용]**
 
 <br>
 
-![helm_02](../../images/06-senario03.png)
+![helm_02](../../images/01-06-03.png)
 **[그림3. 각 서비스를 구성하는 k8s 리소스들이 어느 정도 정해져 있을 때, helm 사용]**
 
 <br>
 
-![helm_kustomize](../../images/06-senario04.png)
+![helm_kustomize](../../images/01-06-04.png)
 **[그림4. 모든 서비스에 일괄적으로 컴플라이언스 및 공통 규칙을 적용하고, 커스텀을 쉽게 진행하기 위해서, kustomize와 helm을 사용]**
 
 <br>

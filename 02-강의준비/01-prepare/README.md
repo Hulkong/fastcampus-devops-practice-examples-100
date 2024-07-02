@@ -19,4 +19,4 @@
 5. ArgoCD Vault Plugin을 이용하여 보안을 강화해봅니다.
 6. ArgoCD를 이용하여 Orphaned Resources를 관리해봅니다.
 
-![인프라 환경](../../images/02-01-image.png)
+![인프라 환경](../../images/02-01.png)

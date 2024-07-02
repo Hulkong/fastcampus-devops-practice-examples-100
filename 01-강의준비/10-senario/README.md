@@ -16,12 +16,12 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br>
 
-![umbrella_helm_chart01](../../images/11-senario01.png)
+![umbrella_helm_chart01](../../images/01-11-01.png)
 **[그림1. 모든 서비스에서 특별 관리되고 있는 Ingress 리소스를 포함시켜야 하는 경우]**
 
 <br>
 
-![umbrella_helm_chart02](../../images/11-senario02.png)
+![umbrella_helm_chart02](../../images/01-11-02.png)
 **[그림2. 쉽고 간편하게 frontend, backend, DB가 포함된 서비스를 배포하고자 하는 경우]**
 
 <br><br>

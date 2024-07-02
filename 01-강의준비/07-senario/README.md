@@ -20,12 +20,12 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br>
 
-![IRSA_01](../../images/07-senario01.png)
+![IRSA_01](../../images/01-07-01.png)
 **[그림1. IRSA가 관여하는 추상적인 범위]**
 
 <br>
 
-![IRSA_02](../../images/07-senario02.png)
+![IRSA_02](../../images/01-07-02.png)
 **[그림2. IRSA의 메카니즘]**
 
 <br><br>

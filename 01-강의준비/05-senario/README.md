@@ -16,7 +16,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 이번 실습에서는 `Stuck` 상태를 재현해 보고, 해당 상태를 해결해보도록 합니다.
 
-![stuck](../../images/05-senario.png)
+![stuck](../../images/01-05.png)
 **[그림1. 파드의 stuck 상태를 일으키는 다양한 원인]**
 
 <br><br>

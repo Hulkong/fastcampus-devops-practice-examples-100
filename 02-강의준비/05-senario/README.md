@@ -19,7 +19,7 @@ GitOps 기반 배포 프로세스의 장점은 변경 사항을 Git 저장소에
 <br>
 
 push 방식은 GitOps의 기본적인 방식으로, Git 저장소에 변경 사항을 커밋하고, 이를 트리거로 배포를 진행합니다. 이러한 방식은 변경 사항을 추적하기 쉽고, 변경 사항을 관리하기 쉽게 만들어줍니다. 다만, 다음의 단점이 존재합니다.
-![push 기반 GitOps 배포 프로세스](../../images/02-05-01-image.png)
+![push 기반 GitOps 배포 프로세스](../../images/02-05-01.png)
 **[그림1. push 기반 GitOps 배포 프로세스]**
 
 - 잘못된 코드나 설정이 Git 저장소에 푸시되면 이로 인해 배포가 실패하거나 시스템에 오류가 발생할 수 있습니다.
@@ -31,7 +31,7 @@ push 방식은 GitOps의 기본적인 방식으로, Git 저장소에 변경 사�
 <br>
 
 pull 방식은 GitOps의 확장된 방식으로, Git 저장소에 변경 사항을 커밋하고, 이를 트리거로 배포를 진행합니다. 이러한 방식은 변경 사항을 추적하기 쉽고, 변경 사항을 관리하기 쉽게 만들어줍니다. 또한, 다음의 장점이 존재합니다.
-![pull 기반 GitOps 배포 프로세스](../../images/02-05-02-image.png)
+![pull 기반 GitOps 배포 프로세스](../../images/02-05-02.png)
 **[그림2. pull 기반 GitOps 배포 프로세스]**
 
 - 변경 사항이 Git 저장소에 푸시되지 않아도, 일정 주기로 클러스터의 상태를 갱신할 수 있습니다. 이는 실시간으로 변경 사항을 반영하기 쉽게 만들어줍니다.
@@ -41,7 +41,7 @@ pull 방식은 GitOps의 확장된 방식으로, Git 저장소에 변경 사항�
 <br>
 
 이 중, ArgoCD Image Updater는 pull 방식의 배포 프로세스를 지원하는 도구입니다. ArgoCD Image Updater를 사용하여 이미지 업데이트를 자동화하고, ArgoCD를 통해 배포를 진행할 수 있습니다.
-![ArgoCD 인프라를 이용한 pull 기반 GitOps 배포 프로세스](../../images/02-05-03-image.png)
+![ArgoCD 인프라를 이용한 pull 기반 GitOps 배포 프로세스](../../images/02-05-03.png)
 **[그림1. ArgoCD 인프라를 이용한 pull 기반 GitOps 배포 프로세스]**
 
 ArgoCD Image Updater는 다음과 같은 기능을 제공합니다. 👉 [Features](https://argocd-image-updater.readthedocs.io/en/stable/#features)

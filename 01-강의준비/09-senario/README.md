@@ -20,12 +20,12 @@ LiveneesProbe로 인해 서비스 다운타임이 발생하는 시나리오를 �
 
 <br>
 
-![fail_livenessprobe01](../../images/10-senario01.png)
+![fail_livenessprobe01](../../images/01-10-01.png)
 **[그림1. 외부 서비스 및 DB가 다운됨에 따라서 자신의 서비스도 비정상적으로 restart되는 현상]**
 
 <br>
 
-![fail_livenessprobe02](../../images/10-senario02.png)
+![fail_livenessprobe02](../../images/01-10-02.png)
 **[그림2. CPU Intensive한 서비스에 LivenessProbe에 실패하여 비정상적으로 restart되는 현상]**
 
 <br><br>

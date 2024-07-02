@@ -20,7 +20,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 그렇다면, 이러한 이슈를 해결하기 위해서는 무엇이 필요할까요? Node를 자동적으로 `스케일 인<->아웃`하는 오토 스케일러가 필요합니다. 이 스케일러에는 `cluster autosclaer(CA)`와 `karpenter`가 존재합니다. 이 두 스케일러를 기반으로 시나리오를 진행하며, 왜 karpenter가 CA에 비해서 각광을 받는지 살펴봅니다.
 
-![karpenter_ca](../../images/01-senario.png)
+![karpenter_ca](../../images/01-01.png)
 
 <br><br>
 

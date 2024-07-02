@@ -19,7 +19,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br>
 
-![multi_cluster](../../images/09-senario.png)
+![multi_cluster](../../images/01-09.png)
 **[그림1. 멀티 클러스터를 이용하여 EKS 노드 버전을 업그레이드]**
 
 <br><br>

@@ -18,7 +18,7 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 우리는 이 실습에서 `HPA`와 `Karpenter`가 적용되어 있는 환경에 CPU 사용률이 높은 샘플 앱을 배포하여 오버프로비저닝이 없을 때와 있을 때의 스케쥴링 속도에 대한 차이를 비교해 봅니다.
 
-![overprovisioning](../../images/03-senario.png)
+![overprovisioning](../../images/01-03.png)
 **[그림1. 오버프로비저닝을 사용하여 빠르게 파드를 스케쥴링]**
 
 <br><br>

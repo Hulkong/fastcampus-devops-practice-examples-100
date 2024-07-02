@@ -16,12 +16,12 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 
 다음은 Cluster 내부에 Secret이 노출되는 그림입니다.
 
-![base64로 디코딩 가능한 사례](../../images/02-06-01-image.png)
+![base64로 디코딩 가능한 사례](../../images/02-06-01.png)
 **[그림1. base64로 디코딩 가능한 사례]**
 
 <br>
 
-![민감정보가 노출된 사례](../../images/02-06-02-image.png)
+![민감정보가 노출된 사례](../../images/02-06-02.png)
 **[그림2. 민감정보가 노출된 사례]**
 
 <br><br>
@@ -31,7 +31,7 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 > **ArgoCD Vault Plugin**
  ArgoCD와 HashiCorp Vault 또는 AWS Secrets Manager와 같은 Secret Management Systems를 통합하여, 쿠버네티스 Secret을 안전하게 관리하는 데 사용되는 도구입니다. 이 플러그인을 사용하면, ArgoCD는 Vault 또는 AWS Secrets Manager에 저장된 Secret을 읽어와서 쿠버네티스 클러스터에 배포할 수 있습니다.
 
-![ArgoCD Vault Plugin을 이용하여 민감정보 보호](../../images/02-06-03-image.png)
+![ArgoCD Vault Plugin을 이용하여 민감정보 보호](../../images/02-06-03.png)
 **[그림3. ArgoCD Vault Plugin을 이용하여 민감정보 보호]**
 
 <br><br>
@@ -39,7 +39,7 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 > **External Secret**
  External Secrets는 쿠버네티스 환경에서 외부 Secret Management Systems에 저장된 Secret을 사용할 수 있게 해주는 도구입니다. 이를 통해 애플리케이션은 쿠버네티스 Secret처럼 외부 Secret Management Systems에 저장된 Secret을 사용할 수 있습니다. 이는 Secret을 쿠버네티스 클러스터 외부에 안전하게 저장할 수 있게 해주며, Secret의 라이프사이클을 쿠버네티스 클러스터와 독립적으로 관리할 수 있게 해줍니다.
 
-![External Secret을 이용하여 민감정보 보호](../../images/02-06-04-image.png)
+![External Secret을 이용하여 민감정보 보호](../../images/02-06-04.png)
 **[그림4. External Secret을 이용하여 민감정보 보호]**
 
 <br><br>
@@ -57,7 +57,7 @@ ArgoCD에서 민감정보를 관리하고, 동기화 하는 방법에 대해 설
 
 각 회사 및 팀의 정책에 따라 운영 방법이 다르겠지만, 별도의 리소스를 생성하지 않고, 동기화의 주기가 긴 인프라성 서비스에는 `ArgoCD Vault Plugin`을 사용하고, 동기화의 주기가 짧은 서비스에는 `External Secret`을 사용하는 것이 좋습니다.
 
-![AVP와 ESO의 사용처](../../images/02-06-05-image.png)
+![AVP와 ESO의 사용처](../../images/02-06-05.png)
 **[그림5. AVP와 ESO의 사용처]**
 
 <br><br>
