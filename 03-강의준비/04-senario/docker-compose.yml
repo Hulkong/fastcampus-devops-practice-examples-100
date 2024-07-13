@@ -1,0 +1,8 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  large_data_generator:
+    build: .
+    volumes:
+      - /data:/data
