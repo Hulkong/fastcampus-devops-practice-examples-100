@@ -1,5 +1,5 @@
 provider "github" {
-  owner = "kasa-sg"
+  owner = ""
 }
 
 terraform {
@@ -7,7 +7,6 @@ terraform {
 
   required_providers {
     github = {
-      #      source  = "integrations/github"
       source  = "hashicorp/github"
       version = "~> 4.0"
     }
@@ -15,7 +14,7 @@ terraform {
 
   backend "remote" {
     hostname     = "app.terraform.io"
-    organization = "kasa-sg"
+    organization = ""
 
     workspaces {
       name = "github"

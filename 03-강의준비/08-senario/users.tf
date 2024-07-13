@@ -1,57 +1,28 @@
 locals {
 
   # A map of admin machine users. These users are used for tasks such like CI & CD, releasing, etc.
-  admin_machine_users = {
-    "devops-sg+github@kasacorp.com" = "kasa-singapore"
-  }
+  admin_machine_users = {}
 
   # A map of GitHub users that should have admin permissions
-  admin_users = {
-    "nissi@kasacorp.com" = "wonyee2"
-  }
+  admin_users = {}
 
   devops_users = {
     "cdfgogo0615@naver.com" = "Hulkong"
-    "sena0711@gmail.com"    = "sena0711"
   }
 
-  data_users = {
-    "patrick.chang1223@gmail.com" = "pjloveshiphop"
-  }
+  data_users = {}
 
-  secops_users = {
-    "sgops81@gmail.com" = "kez-park"
-  }
+  secops_users = {}
 
-  backend_users = {
-    "kirby@kasacorp.com"     = "gunsookirby"
-    "kyle@kasacorp.com"      = "kyle-kasa"
-    "hannah@kasacorp.com"    = "yangahhh"
-    "leelee@kasacorp.com"    = "kasa-leelee"
-    "leelightreal@gmail.com" = "lightreal"
-    "koko@kasacorp.com"      = "kokohanii"
-  }
+  backend_users = {}
 
-  backend_managers = {
-    "kirby@kasacorp.com"     = "gunsookirby"
-    "kyle@kasacorp.com"      = "kyle-kasa"
-    "leelightreal@gmail.com" = "lightreal"
-  }
+  backend_managers = {}
 
-  frontend_users = {
-    "santa@kasacorp.com"  = "santa-hwang"
-    "naeun0739@gmail.com" = "naeun419"
-    "kirby@kasacorp.com"  = "gunsookirby"
-    "kyle@kasacorp.com"   = "kyle-kasa"
-  }
+  frontend_users = {}
 
-  blockchain_users = {
-    "leelightreal@gmail.com" = "lightreal"
-  }
+  blockchain_users = {}
 
-  partner_users = {
-    "goofcode@gmail.com" = "goofcode"
-  }
+  partner_users = {}
 
   # A map of member machine users. These users are used by automation processes such as cloning repositories
   member_machine_users = {}
