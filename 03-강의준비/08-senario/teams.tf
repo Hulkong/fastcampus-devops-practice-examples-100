@@ -28,27 +28,6 @@ module "team_admin" {
   push_repositories = []
 }
 
-
-# module "team_devops" {
-#   source  = "mineiros-io/team/github"
-#   version = "~> 0.6.0"
-
-#   name    = "DevOps"
-#   privacy = "secret"
-
-#   members = values(local.devops_users)
-
-#   admin_repositories = concat(
-#     local.share_repository,
-#     local.devops_repository,
-#     local.backend_repository,
-#     local.blockchain_repository
-#   )
-
-#   pull_repositories = []
-#   push_repositories = []
-# }
-
 module "team_data" {
   source  = "mineiros-io/team/github"
   version = "~> 0.6.0"
@@ -144,3 +123,23 @@ module "team_partner" {
     local.partner_repository
   )
 }
+
+# module "team_devops" {
+#   source  = "mineiros-io/team/github"
+#   version = "~> 0.6.0"
+
+#   name    = "DevOps"
+#   privacy = "secret"
+
+#   members = values(local.devops_users)
+
+#   admin_repositories = concat(
+#     local.share_repository,
+#     local.devops_repository,
+#     local.backend_repository,
+#     local.blockchain_repository
+#   )
+
+#   pull_repositories = []
+#   push_repositories = []
+# }
