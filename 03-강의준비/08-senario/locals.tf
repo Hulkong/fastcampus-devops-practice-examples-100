@@ -2,7 +2,9 @@ locals {
 
   share_repository = []
 
-  devops_repository = []
+  devops_repository = [
+    # "test-repository"
+  ]
 
   backend_repository = []
 

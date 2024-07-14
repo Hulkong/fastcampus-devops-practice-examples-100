@@ -1,5 +1,5 @@
 provider "github" {
-  owner = ""
+  owner = "fastcampus-devops-practice-examples-100"
 }
 
 terraform {
@@ -9,15 +9,6 @@ terraform {
     github = {
       source  = "hashicorp/github"
       version = "~> 4.0"
-    }
-  }
-
-  backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = ""
-
-    workspaces {
-      name = "github"
     }
   }
 }

@@ -2,7 +2,7 @@ module "repository-part03-08-senario" {
   source  = "mineiros-io/repository/github"
   version = "~> 0.10.0"
 
-  name                   = "fastcampus-devops-practice-examples-100"
+  name                   = "test-repository"
   allow_rebase_merge     = true
   allow_squash_merge     = true
   delete_branch_on_merge = true

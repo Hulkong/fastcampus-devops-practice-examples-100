@@ -4,10 +4,13 @@ locals {
   admin_machine_users = {}
 
   # A map of GitHub users that should have admin permissions
-  admin_users = {}
+  admin_users = {
+    "cdfgogo0615@naver.com" = "Hulkong"
+    # "baramboys0615@gmail.com" = "hulkong2"
+  }
 
   devops_users = {
-    "cdfgogo0615@naver.com" = "Hulkong"
+    # "baramboys0615@gmail.com" = "hulkong2"
   }
 
   data_users = {}
