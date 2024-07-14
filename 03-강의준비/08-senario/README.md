@@ -81,5 +81,10 @@ terraform destroy --auto-approve
 
 <br><br>
 
-## 파일 설명
+## 참고
 
+- [mineiros-io](https://github.com/mineiros-io)
+- [A Terraform module to manage GitHub Organizations.](https://registry.terraform.io/modules/mineiros-io/organization/github/latest)
+- [A Terraform 0.12 module to manage GitHub Repositories.](https://registry.terraform.io/modules/mineiros-io/repository/github/0.0.6)
+- [A Terraform module to manage GitHub Teams.](https://registry.terraform.io/modules/mineiros-io/team/github/latest)
+- [Used to interact with GitHub organization resources, such as managing your GitHub organization members and teams](https://registry.terraform.io/providers/hashicorp/github/latest)
