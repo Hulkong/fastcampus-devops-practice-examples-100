@@ -79,5 +79,6 @@ terraform destroy --auto-approve
 
 ## 참고
 
+- [일정에 따라 실행되는 Amazon EventBridge 규칙 생성](https://docs.aws.amazon.com/ko_kr/eventbridge/latest/userguide/eb-create-rule-schedule.html)
 - [AWS Lambda 공식 문서](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 - [AWS RDS 공식 문서](https://docs.aws.amazon.com/rds/index.html)
