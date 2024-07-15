@@ -1,6 +1,24 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "us-west-2" # 원하는 리전으로 설정
 }
+
+# resource "aws_vpc" "main" {
+#   cidr_block = "10.0.0.0/16"
+
+#   tags = {
+#     Name = "main_vpc"
+#   }
+# }
+
+# resource "aws_subnet" "main" {
+#   vpc_id            = aws_vpc.main.id
+#   cidr_block        = "10.0.1.0/24"
+#   availability_zone = "us-west-2a"
+
+#   tags = {
+#     Name = "main_subnet"
+#   }
+# }
 
 data "aws_vpc" "selected" {
   filter {
@@ -9,37 +27,26 @@ data "aws_vpc" "selected" {
   }
 }
 
-resource "aws_instance" "docker_instance" {
-  ami           = "ami-0c55b159cbfafe1f0" # 예시 AMI ID, 실제 환경에 맞게 변경
-  instance_type = "t2.micro"
-  key_name      = "your-key-pair" # 기존 키 페어 이름
+data "aws_subnets" "selected" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt-get update
-              sudo apt-get install -y docker.io docker-compose
-              sudo systemctl start docker
-              sudo systemctl enable docker
-
-              # Clone the repository containing Dockerfile and scripts
-              git clone https://your-repo-url.git /home/ubuntu/large_data_generator
-              cd /home/ubuntu/large_data_generator
-
-              # Build the Docker image
-              sudo docker-compose build
-
-              # Run the Docker container
-              sudo docker-compose up -d
-              EOF
-
-  tags = {
-    Name = "DockerInstance"
+  filter {
+    name   = "availability-zone"
+    values = ["us-west-2a"]
   }
 }
 
-resource "aws_security_group" "instance_sg" {
+locals {
+  selected_subnet_id = data.aws_subnets.selected.ids[0]
+}
+
+
+
+resource "aws_security_group" "instance" {
   vpc_id = data.aws_vpc.selected.id
-  name   = "instance_sg"
 
   ingress {
     from_port   = 22
@@ -54,4 +61,56 @@ resource "aws_security_group" "instance_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "instance_sg"
+  }
+}
+
+resource "aws_instance" "example" {
+  ami                    = "ami-0323ead22d6752894" # Amazon Linux 2 AMI ID
+  instance_type          = "t2.micro"
+  subnet_id              = local.selected_subnet_id
+  vpc_security_group_ids = [aws_security_group.instance.id]
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
+  user_data              = file("userdata.sh")
+
+  tags = {
+    Name = "example-instance"
+  }
+}
+
+resource "aws_iam_role" "ec2_role" {
+  name = "ec2_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_attach" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2_profile"
+  role = aws_iam_role.ec2_role.name
+}
+
+output "instance_id" {
+  value = aws_instance.example.id
+}
+
+output "instance_public_ip" {
+  value = aws_instance.example.public_ip
 }
