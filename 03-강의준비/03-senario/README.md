@@ -12,9 +12,8 @@ AWS 서비스 쿼타의 문제를 발생시키고, 해결해 본다.
 
 ## 내용
 
-이 강의에서는 AWS 서비스 쿼타 초과 문제를 재현하고, 이를 해결하는 방법을 실습합니다. 두 가지 시나리오를 다룹니다:
+이 강의에서는 AWS 서비스 쿼타 초과 문제를 재현하고, 이를 해결하는 방법을 실습합니다.
 1. Elastic IP (EIP) 쿼타 초과 이슈
-2. VPC 쿼타 초과 이슈
 
 <br><br>
 
@@ -33,12 +32,6 @@ AWS 서비스 쿼타의 문제를 발생시키고, 해결해 본다.
 2. EIP 할당 시 발생하는 오류 메시지를 확인합니다.
 3. AWS Management Console 또는 AWS CLI를 사용하여 EIP 쿼타 증가 요청을 제출합니다.
 4. 쿼타 증가가 승인되면 다시 EIP를 할당하여 문제가 해결되었음을 확인합니다.
-
-### 시나리오2: VPC 쿼타 초과 이슈를 재현하고, 해결해 본다.
-1. 여러 개의 VPC를 생성하여 기본 쿼타(5개)를 초과합니다.
-2. VPC 생성 시 발생하는 오류 메시지를 확인합니다.
-3. AWS Management Console 또는 AWS CLI를 사용하여 VPC 쿼타 증가 요청을 제출합니다.
-4. 쿼타 증가가 승인되면 다시 VPC를 생성하여 문제가 해결되었음을 확인합니다.
 
 <br><br>
 
@@ -72,15 +65,10 @@ terraform -chdir=../ init
 terraform -chdir=../ plan
 terraform -chdir=../ apply --auto-approve
 
-# 1. AWS CloudWatch, Lambda, RDS 인스턴스 생성
+# 1. EIP 쿼타 초과 이슈 재현 및 해결
 terraform init
 terraform apply --auto-approve
 
 # 2. 실습환경 삭제
 terraform destroy --auto-approve
 ```
-
-<br><br>
-
-## 참고
-- [내용을 입력해주세요.](내용을 입력해주세요.)
