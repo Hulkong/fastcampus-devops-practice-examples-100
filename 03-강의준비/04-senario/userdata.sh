@@ -7,7 +7,7 @@ usermod -a -G docker ec2-user
 # Create Dockerfile and build script
 cat << 'EOF' > /home/ec2-user/Dockerfile
 FROM ubuntu:latest
-RUN dd if=/dev/zero of=/bigfile bs=1M count=1024
+RUN dd if=/dev/zero of=/bigfile bs=1M count=1024 # 0으로 채워진 1024MB 크기의 파일을 생성합니다.
 EOF
 
 cat << 'EOF' > /home/ec2-user/build_images.sh
