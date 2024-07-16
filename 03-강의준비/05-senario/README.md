@@ -63,7 +63,11 @@
 ## 파일 설명
 |파일명|설명|
 |---|---|
-|내용을 입력해주세요.|내용을 입력해주세요.|
+|ci.yml|Github Action을 위한 설정 파일|
+|index.js|expressJS 서버를 구동시키는 엔트리 파일|
+|package.json|npm 패키지 관리 파일|
+|PULL_REQUEST_TEMPLATE.md|PR 템플릿 파일|
+|test.js|테스트 코드 파일|
 
 <br><br>
 
