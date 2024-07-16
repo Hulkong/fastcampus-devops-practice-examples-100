@@ -1,0 +1,572 @@
+# Helm chart values
+controller:
+  replicas: 2
+  pdb:
+    enabled: true
+    minAvailable: "1"
+
+server:
+  extraArgs:
+    - --insecure
+  replicas: 2
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+  pdb:
+    enabled: true
+    minAvailable: "1"
+  service:
+    type: "ClusterIP"
+
+repoServer:
+  replicas: 2
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 15
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+
+applicationSet:
+  replicas: 2
+  pdb:
+    enabled: true
+    minAvailable: "1"
+
+configs:
+  cm:
+    url: "https://argocd.dev.hulkong.shop"
+  cmp:
+    create: true
+    plugins:
+      argocd-vault-plugin:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - sh
+              - "-c"
+              - "find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
+        generate:
+          command:
+            - argocd-vault-plugin
+            - generate
+            - "."
+        lockRepo: false
+
+      argocd-vault-plugin-helm:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - sh
+              - "-c"
+              - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+        generate:
+          command:
+            - sh
+            - "-c"
+            - |
+              helm template $ARGOCD_APP_NAME --include-crds -n $ARGOCD_APP_NAMESPACE ${ARGOCD_ENV_HELM_ARGS} . |
+              argocd-vault-plugin generate -
+        lockRepo: false
+
+      argocd-vault-plugin-helm-with-values:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - sh
+              - "-c"
+              - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+        generate:
+          command:
+            - bash
+            - "-c"
+            - |
+              helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE ${ARGOCD_ENV_HELM_ARGS} -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
+              argocd-vault-plugin generate -
+        lockRepo: false
+
+      argocd-vault-plugin-kustomize:
+        allowConcurrency: true
+        discover:
+          find:
+            command:
+              - find
+              - "."
+              - -name
+              - kustomization.yaml
+        generate:
+          command:
+            - sh
+            - "-c"
+            - "kustomize build . | argocd-vault-plugin generate -"
+        lockRepo: false
+
+notifications:
+  notifiers:
+    service.slack: |
+      token: $slack-token
+  context:
+    argocdUrl: "https://argocd.dev.hulkong.shop"
+  templates:
+    template.app-deploy-start: |
+      email:
+        subject: New version of an application {{.app.metadata.name}} is up and running.
+      message: |
+        {{if eq .serviceType "slack"}}:running:{{end}} *베타 배포 시작* ({{.app.metadata.name}})
+      slack:
+        attachments: |-
+          [
+            {
+              "color": "#0DADEA",
+              "blocks": [
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*서비스 이름:* {{.app.metadata.name}}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "{{ if and .app.status.summary.images (gt (len .app.status.summary.images) 0) }}*반영된 이미지 태그*: <{{ (index .app.status.summary.images 1) }}|{{ (index .app.status.summary.images 1) }}>{{ else }}이미지 태그가 없습니다.{{ end }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "ArgoCD",
+                        "emoji": true
+                      },
+                      "value": "ArgoCD",
+                      "url": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+                    }
+                    {{ if and .app.status.summary.externalURLs (gt (len .app.status.summary.externalURLs) 0) }}
+                    ,
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "{{.app.metadata.name}} URL",
+                        "emoji": true
+                      },
+                      "value": "Always 서비스 도메인",
+                      "url": "{{ (index .app.status.summary.externalURLs 0) }}"
+                    }
+                    {{ end }}
+                  ]
+                }
+              ]
+            }
+          ]
+    template.app-deployed: |
+      email:
+        subject: New version of an application {{.app.metadata.name}} is up and running.
+      message: |
+        {{if eq .serviceType "slack"}}:confetti_ball:{{end}} *베타 배포 완료* ({{.app.metadata.name}})
+      slack:
+        attachments: |-
+          [
+            {
+              "color": "#18be52",
+              "blocks": [
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*서비스 이름:* {{.app.metadata.name}}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "{{ if and .app.status.summary.images (gt (len .app.status.summary.images) 0) }}*반영된 이미지 태그*: <{{ (index .app.status.summary.images 0) }}|{{ (index .app.status.summary.images 0) }}>{{ else }}이미지 태그가 없습니다.{{ end }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "ArgoCD",
+                        "emoji": true
+                      },
+                      "value": "ArgoCD",
+                      "url": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+                    }
+                    {{ if and .app.status.summary.externalURLs (gt (len .app.status.summary.externalURLs) 0) }}
+                    ,
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "{{.app.metadata.name}} URL",
+                        "emoji": true
+                      },
+                      "value": "Always 서비스 도메인",
+                      "url": "{{ (index .app.status.summary.externalURLs 0) }}"
+                    }
+                    {{ end }}
+                  ]
+                }
+              ]
+            }
+          ]
+    template.app-deployed-failed: |
+      email:
+        subject: New version of an application {{.app.metadata.name}} is up and running.
+      message: |
+        {{if eq .serviceType "slack"}}:rotating_light:{{end}} *베타 배포 실패* ({{.app.metadata.name}})
+      slack:
+        attachments: |-
+          [
+            {
+              "color": "#E96D76",
+              "blocks": [
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*서비스 이름:* {{.app.metadata.name}}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "{{ if and .app.status.summary.images (gt (len .app.status.summary.images) 0) }}*반영된 이미지 태그*: <{{ (index .app.status.summary.images 0) }}|{{ (index .app.status.summary.images 0) }}>{{ else }}이미지 태그가 없습니다.{{ end }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "ArgoCD",
+                        "emoji": true
+                      },
+                      "value": "ArgoCD",
+                      "url": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+                    }
+                    {{ if and .app.status.summary.externalURLs (gt (len .app.status.summary.externalURLs) 0) }}
+                    ,
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "{{.app.metadata.name}} URL",
+                        "emoji": true
+                      },
+                      "value": "Always 서비스 도메인",
+                      "url": "{{ (index .app.status.summary.externalURLs 0) }}"
+                    }
+                    {{ end }}
+                  ]
+                }
+              ]
+            }
+          ]
+    template.app-health-degraded: |
+      email:
+        subject: Application {{.app.metadata.name}} has degraded.
+      message: |
+        {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} has degraded.
+        Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+      slack:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#f4c030",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {{if .app.spec.source.repoURL}}
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{else}}
+            {
+                "title": "Repository",
+                "value": "{{ (index .app.spec.sources 0).repoURL }}",
+                "short": true
+            }
+            {{end}}
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+    template.app-sync-failed: |
+      email:
+        subject: Failed to sync application {{.app.metadata.name}}.
+      message: |
+        {{if eq .serviceType "slack"}}:exclamation:{{end}}  The sync operation of application {{.app.metadata.name}} has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+        Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+      slack:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#E96D76",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {{if .app.spec.source.repoURL}}
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{else}}
+            {
+                "title": "Repository",
+                "value": "{{ (index .app.spec.sources 0).repoURL }}",
+                "short": true
+            }
+            {{end}}
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+    template.app-sync-running: |
+      email:
+        subject: Start syncing application {{.app.metadata.name}}.
+      message: |
+        The sync operation of application {{.app.metadata.name}} has started at {{.app.status.operationState.startedAt}}.
+        Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+      slack:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#0DADEA",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {{if .app.spec.source.repoURL}}
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{else}}
+            {
+                "title": "Repository",
+                "value": "{{ (index .app.spec.sources 0).repoURL }}",
+                "short": true
+            }
+            {{end}}
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+    template.app-sync-status-unknown: |
+      email:
+        subject: Application {{.app.metadata.name}} sync status is 'Unknown'
+      message: |
+        {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} sync is 'Unknown'.
+        Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+        {{if ne .serviceType "slack"}}
+        {{range $c := .app.status.conditions}}
+            * {{$c.message}}
+        {{end}}
+        {{end}}
+      slack:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#E96D76",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {{if .app.spec.source.repoURL}}
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{else}}
+            {
+                "title": "Repository",
+                "value": "{{ (index .app.spec.sources 0).repoURL }}",
+                "short": true
+            }
+            {{end}}
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+    template.app-sync-succeeded: |
+      email:
+        subject: Application {{.app.metadata.name}} has been successfully synced.
+      message: |
+        {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} has been successfully synced at {{.app.status.operationState.finishedAt}}.
+        Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+      slack:
+        attachments: |-
+          [{
+            "title": "{{ .app.metadata.name}}",
+            "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#18be52",
+            "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{.app.status.sync.status}}",
+              "short": true
+            },
+            {{if .app.spec.source.repoURL}}
+            {
+              "title": "Repository",
+              "value": "{{.app.spec.source.repoURL}}",
+              "short": true
+            }
+            {{else}}
+            {
+                "title": "Repository",
+                "value": "{{ (index .app.spec.sources 0).repoURL }}",
+                "short": true
+            }
+            {{end}}
+            {{range $index, $c := .app.status.conditions}}
+            {{if not $index}},{{end}}
+            {{if $index}},{{end}}
+            {
+              "title": "{{$c.type}}",
+              "value": "{{$c.message}}",
+              "short": true
+            }
+            {{end}}
+            ]
+          }]
+
+  triggers:
+    trigger.on-deploy-start: |
+      - description: Application is deploying.
+        oncePer: app.status.summary.images != nil and app.status.summary.images[1] != nil and app.status.summary.images[1]
+        send:
+        - app-deploy-start
+        when: app.status.health.status == 'Progressing'
+    trigger.on-deployed: |
+      - description: Application is succeeded to deploy.
+        oncePer: app.status.summary.images != nil and app.status.summary.images[0]
+        send:
+        - app-deployed
+        when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+    trigger.on-deployed-failed: |
+      - description: Application is failed to deploy.
+        oncePer: app.status.summary.images != nil and app.status.summary.images[0]
+        send:
+        - app-deployed-failed
+        when: app.status.operationState.phase in ['Error', 'Failed']
+    trigger.on-health-degraded: |
+      - description: Application has degraded
+        send:
+        - app-health-degraded
+        when: app.status.health.status == 'Degraded'
+    trigger.on-sync-failed: |
+      - description: Application syncing has failed
+        send:
+        - app-sync-failed
+        when: app.status.operationState.phase in ['Error', 'Failed']
+    trigger.on-sync-running: |
+      - description: Application is being synced
+        send:
+        - app-sync-running
+        when: app.status.operationState.phase in ['Running']
+    trigger.on-sync-status-unknown: |
+      - description: Application status is 'Unknown'
+        send:
+        - app-sync-status-unknown
+        when: app.status.sync.status == 'Unknown'
+    trigger.on-sync-succeeded: |
+      - description: Application syncing has succeeded
+        send:
+        - app-sync-succeeded
+        when: app.status.operationState.phase in ['Succeeded']
+
+    defaultTriggers: |
+      - on-sync-status-unknown

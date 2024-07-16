@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook
+  namespace: argocd
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - key: akuity.io/argo-cd-cluster-name
+              operator: NotIn
+              values: [in-cluster]
+  template:
+    metadata:
+      name: guestbook
+      labels:
+        workload: "true"
+    spec:
+      project: "{{metadata.annotations.workload_project}}"
+      source:
+        repoURL: "{{metadata.annotations.workload_repo_url}}"
+        path: "{{metadata.annotations.workload_repo_basepath}}apps/guestbook"
+        targetRevision: "{{metadata.annotations.workload_repo_revision}}"
+      destination:
+        namespace: guestbook
+        name: "{{name}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - Validate=false
+          - PrunePropagationPolicy=foreground
+          - PruneLast=false
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
