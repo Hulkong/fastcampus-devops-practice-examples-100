@@ -79,7 +79,7 @@ terraform -chdir=aws plan
 terraform -chdir=aws apply --auto-approve
 
 # 2. 실습환경 삭제
-# 주의 사항은 AWS ALB와 TargetGroup은 Terraform에서 상태관리 되지 않기 때문에 수동으로 삭제해야 합니다.
+# 실습 정리할 때, AWS ALB와 TargetGroup, Route53 record은 Terraform에서 상태관리 되지 않기 때문에 수동으로 삭제해야 합니다.
 terraform -chdir=aws state rm 'module.argocd[0].argocd_project.administration' &&\
 terraform -chdir=aws state rm 'module.argocd[0].argocd_project.workload' &&\
 terraform -chdir=aws state rm 'module.argocd[0].argocd_application.bootstrap_workloads' &&\
@@ -92,5 +92,14 @@ terraform -chdir=aws state rm 'kubernetes_secret.git_repo_credential_templates' 
 terraform -chdir=aws state rm 'kubernetes_secret.argocd_vault_plugin_credentials' &&\
 terraform -chdir=aws state rm 'module.gitops_bridge_bootstrap.helm_release.argocd[0]' &&\
 terraform -chdir=aws state rm 'module.gitops_bridge_bootstrap.kubernetes_secret_v1.cluster[0]' &&\
-terraform destroy --auto-approve
+terraform -chdir=aws destroy --auto-approve
 ```
+
+<br><br>
+
+## 참고
+
+- [gitops-bridge](https://github.com/gitops-bridge-dev/gitops-bridge)
+- [gitops-bridge-argocd-control-plane-template](https://github.com/gitops-bridge-dev/gitops-bridge-argocd-control-plane-template)
+- [GitOps Bridge 패턴 예제코드](https://github.com/Hulkong/fastcampus-devops-practice-examples-100-gitops)
+- [Protect sensitive input variables](https://developer.hashicorp.com/terraform/tutorials/configuration-language/sensitive-variables)
