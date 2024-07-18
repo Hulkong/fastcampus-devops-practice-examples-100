@@ -73,6 +73,33 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 
 <br><br>
 
+## 실제 실습 명령어
+
+```bash
+# 0. 실습 환경 구축(아래의 명령어로 구축하거나 Terraform Cloud를 통해서 삭제)
+terraform -chdir=aws init
+terraform -chdir=aws plan
+terraform -chdir=aws apply --auto-approve
+
+# 1. 실습환경 삭제
+# 실습 정리할 때, AWS ALB와 TargetGroup, Route53 record은 Terraform에서 상태관리 되지 않기 때문에 수동으로 삭제해야 합니다.
+terraform -chdir=aws state rm 'module.argocd[0].argocd_project.administration' &&\
+terraform -chdir=aws state rm 'module.argocd[0].argocd_project.workload' &&\
+terraform -chdir=aws state rm 'module.argocd[0].argocd_application.bootstrap_workloads' &&\
+terraform -chdir=aws state rm 'module.argocd[0].argocd_application.bootstrap_addons' &&\
+terraform -chdir=aws state rm 'kubernetes_namespace.argocd' &&\
+terraform -chdir=aws state rm 'kubectl_manifest.karpenter_default_ec2_node_class' &&\
+terraform -chdir=aws state rm 'kubectl_manifest.karpenter_default_node_pool' &&\
+terraform -chdir=aws state rm 'module.eks.kubernetes_config_map_v1_data.aws_auth' 
+terraform -chdir=aws state rm 'kubernetes_secret.git_repo_credential_templates' &&\
+terraform -chdir=aws state rm 'kubernetes_secret.argocd_vault_plugin_credentials' &&\
+terraform -chdir=aws state rm 'module.gitops_bridge_bootstrap.helm_release.argocd[0]' &&\
+terraform -chdir=aws state rm 'module.gitops_bridge_bootstrap.kubernetes_secret_v1.cluster[0]' &&\
+terraform -chdir=aws destroy --auto-approve
+```
+
+<br><br>
+
 ## 참고
 
 - [Slack 워크스페이스 생성](https://slack.com/intl/ko-kr/help/articles/206845317-Slack-%EC%9B%8C%ED%81%AC%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%EC%83%9D%EC%84%B1)
