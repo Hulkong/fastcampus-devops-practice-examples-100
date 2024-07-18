@@ -2,6 +2,15 @@
 # SPDX-License-Identifier: MPL-2.0
 
 terraform {
+  cloud {
+    organization = "fastcampus-devops-practice-examples-100"
+
+    hostname = "app.terraform.io"
+    workspaces {
+      name = "fastcampus-devops-practice-examples-100"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"

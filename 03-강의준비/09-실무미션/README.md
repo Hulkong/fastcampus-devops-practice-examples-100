@@ -54,6 +54,14 @@ terraform으로 프로비저닝된 리소스 및 서비스들은 시나리오 �
 - AWS_ACCESS_KEY_ID: "본인의 AWS Access Key ID"
 ```
   - slack 연동
+3. terraform cloud로 인프라 생성
+4. 확인
+  - AWS Console
+  - kubectl로 EKS 연결
+  - k9s로 리소스가 잘 생성되었는지 확인
+  - ArgoCD UI로 Repo, Project, App 확인
+  - Guestbook 애플리케이션 확인(브라우저로 접속)
+5. terraform cloud로 인프라 삭제
 
 <br><br>
 
