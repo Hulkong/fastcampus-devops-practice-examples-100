@@ -1,0 +1,2 @@
+ghcr_pull_secrets:
+  enabled: true

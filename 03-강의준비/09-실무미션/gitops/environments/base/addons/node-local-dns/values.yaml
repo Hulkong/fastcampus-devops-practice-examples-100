@@ -1,0 +1,6 @@
+# Helm chart values
+config:
+  localDns: "169.254.25.10"
+  setupInterface: true
+  setupIptables: true
+  skipTeardown: true

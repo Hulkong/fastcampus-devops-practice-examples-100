@@ -1,0 +1,40 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: addons-kube-schedule-scaler
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        values:
+          addonChart: kube-schedule-scaler
+        selector:
+          matchExpressions:
+            - key: environment
+              operator: In
+              values: ["dev", "prod"]
+  template:
+    metadata:
+      name: addon-{{name}}-{{values.addonChart}}
+    spec:
+      project: "{{metadata.annotations.addons_project}}"
+      source:
+        repoURL: "{{metadata.annotations.addons_repo_url}}"
+        path: "{{metadata.annotations.addons_repo_basepath}}environments/base/addons/{{values.addonChart}}"
+        targetRevision: "{{metadata.annotations.addons_repo_revision}}"
+      destination:
+        namespace: "{{values.addonChart}}"
+        name: "{{name}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - Validate=false
+          - PrunePropagationPolicy=foreground
+          - PruneLast=false
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true

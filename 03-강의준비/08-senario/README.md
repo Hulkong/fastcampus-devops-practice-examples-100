@@ -88,3 +88,4 @@ terraform destroy --auto-approve
 - [A Terraform 0.12 module to manage GitHub Repositories.](https://registry.terraform.io/modules/mineiros-io/repository/github/0.0.6)
 - [A Terraform module to manage GitHub Teams.](https://registry.terraform.io/modules/mineiros-io/team/github/latest)
 - [Used to interact with GitHub organization resources, such as managing your GitHub organization members and teams](https://registry.terraform.io/providers/hashicorp/github/latest)
+- [Github Personal Access Token](https://docs.github.com/ko/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)

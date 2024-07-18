@@ -1,5 +1,5 @@
 # CH29_03. 시나리오 설명 및 실습
-> **주의사항**
+> **주의사항1**
 실습을 진행하기 전에 AWS 계정 및 필요한 권한이 있는지 확인하세요. 모든 명령어와 파일 경로가 정확히 설정되었는지 확인하고, 필요한 도구가 설치되어 있는지 확인합니다.
 
 > **주의사항2**
@@ -103,3 +103,4 @@ terraform -chdir=aws destroy --auto-approve
 - [gitops-bridge-argocd-control-plane-template](https://github.com/gitops-bridge-dev/gitops-bridge-argocd-control-plane-template)
 - [GitOps Bridge 패턴 예제코드](https://github.com/Hulkong/fastcampus-devops-practice-examples-100-gitops)
 - [Protect sensitive input variables](https://developer.hashicorp.com/terraform/tutorials/configuration-language/sensitive-variables)
+- [Github Personal Access Token](https://docs.github.com/ko/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)

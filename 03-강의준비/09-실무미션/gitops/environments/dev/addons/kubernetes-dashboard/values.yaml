@@ -1,0 +1,19 @@
+# Helm chart values
+extraArgs:
+  - --enable-insecure-login
+  - --insecure-port=9090
+  - --token-ttl=0
+
+service:
+  externalPort: 80
+
+protocolHttp: true
+
+metrics-server:
+  enabled: false
+
+metricsScraper:
+  enabled: true
+
+cert-manager:
+  enabled: false

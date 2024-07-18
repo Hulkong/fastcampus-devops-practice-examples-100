@@ -1,0 +1,4 @@
+# Helm chart values
+enableCertManager: true
+
+enableEndpointSlices: true
